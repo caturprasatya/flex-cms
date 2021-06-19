@@ -30,6 +30,9 @@ export default {
   },
   computed: {
     ...mapState(['sideBarOpen'])
+  },
+  created () {
+    this.$store.dispatch('fetchImages')
   }
 }
 </script>

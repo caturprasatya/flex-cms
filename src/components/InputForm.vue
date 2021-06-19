@@ -27,7 +27,8 @@
                       </div>
                       <p class="pointer-none text-gray-500 "><span class="text-sm">Drag and drop</span> files here <br /> or <a href="" id="" class="text-blue-600 hover:underline">select a file</a> from your computer</p>
                   </div>
-                  <input type="file" class="hidden">
+                  <input type="file"
+                   @change="previewImage" class="hidden" />
               </label>
           </div>
         </div>
@@ -46,8 +47,63 @@
 </template>
 
 <script>
-export default {
+import { storage } from '../configs/firebase'
 
+export default {
+  name: 'Input Form',
+  data () {
+    return {
+      file: {
+        title: '',
+        description: '',
+        data_url: ''
+      },
+      file_data: null,
+      progressBar: 0
+    }
+  },
+  methods: {
+    onUpload () {
+      const uploadTask = storage.ref(`media/${this.file_data?.name}`).put(this.file_data)
+      uploadTask.on(
+        'state_changed',
+        snapshot => {
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          )
+          this.progresBar = progress
+        },
+        error => {
+          console.log(error)
+        },
+        () => {
+          storage
+            .ref('media')
+            .child(this.file_data?.name)
+            .getDownloadURL()
+            .then(downloadUrl => {
+              this.file.data_url = downloadUrl
+            })
+        }
+      )
+    },
+    previewImage (event) {
+      this.file_data = event.target.files[0]
+      this.onUpload()
+    },
+    deleteFileUpload () {
+      // Create a reference to the file to delete
+      var desertRef = storage.ref(`media/${this.file_data?.name}`)
+
+      // Delete the file
+      desertRef.delete().then(function () {
+        // File deleted successfully
+      }).catch(function (error) {
+        // Uh-oh, an error occurred!
+        console.log(error)
+      })
+    }
+  }
 }
 </script>
 
