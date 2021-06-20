@@ -9,7 +9,11 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     galery: [],
-    data: {},
+    data: {
+      title: '',
+      description: '',
+      file_url: 'https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg'
+    },
     search: '',
     sideBarOpen: false
   },
@@ -119,16 +123,16 @@ export default new Vuex.Store({
       }
     },
     async getImageById ({ commit, dispatch }, { id }) {
+      console.log(id)
       try {
         const { data } = await axios({
           method: 'GET',
-          url: `/images/${id}`,
+          url: `/products/${id}`,
           headers: {
             access_token: localStorage.getItem('access_token')
           }
         })
         commit('setImage', data)
-        router.push('/editFile')
       } catch (error) {
         dispatch('errorsHandler', error)
       }

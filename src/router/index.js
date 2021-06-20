@@ -19,6 +19,11 @@ const routes = [
         path: '/addFile',
         name: 'Add File',
         component: () => import('../views/main/Form.vue')
+      },
+      {
+        path: '/edit/:id',
+        name: 'Edit File',
+        component: () => import('../views/main/Form.vue')
       }
     ]
   },

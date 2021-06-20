@@ -14,8 +14,8 @@
                 <input class="text-base p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" type="" placeholder="mail@gmail.com">
         </div>
         <div class="grid grid-cols-1 space-y-2">
-            <label class="text-sm font-bold text-gray-500 tracking-wide">Description</label>
-                <textarea class="text-base p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" type="" placeholder="mail@gmail.com" />
+          <label class="text-sm font-bold text-gray-500 tracking-wide">Description</label>
+              <textarea class="text-base p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" type="" placeholder="mail@gmail.com" />
         </div>
         <div class="grid grid-cols-1 space-y-2">
           <label class="text-sm font-bold text-gray-500 tracking-wide">Attach Document</label>
@@ -23,17 +23,20 @@
               <label class="flex flex-col rounded-lg border-4 border-dashed w-full h-60 p-10 group text-center">
                   <div class="h-full w-full text-center flex flex-col items-center justify-center items-center  ">
                       <div class="flex flex-auto max-h-48 w-2/5 mx-auto -mt-10">
-                      <img class="has-mask h-36 object-center" src="https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg" alt="freepik image">
+                      <img class="has-mask h-36 object-center"
+                      :src="data.file_url" alt="freepik image">
                       </div>
-                      <p class="pointer-none text-gray-500 "><span class="text-sm">Drag and drop</span> files here <br /> or <a href="" id="" class="text-blue-600 hover:underline">select a file</a> from your computer</p>
+                      <p class="pointer-none text-gray-500 "><span class="text-sm">Drag and drop</span> files here <br /> or <a @click="onPickFile" id="" class="text-blue-600 hover:underline">select a file</a> from your computer</p>
                   </div>
                   <input type="file"
-                   @change="previewImage" class="hidden" />
+                   @change="previewImage"
+                   class="hidden"
+                   ref="input" />
               </label>
           </div>
         </div>
           <p class="text-sm text-gray-300">
-              <span>File type: doc,pdf,types of images</span>
+              <span>File type: types of videos and types of images</span>
           </p>
         <div>
           <button type="submit" class="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
@@ -47,19 +50,23 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { storage } from '../configs/firebase'
 
 export default {
   name: 'Input Form',
   data () {
     return {
+      type: this.$route.params?.id ? 'editPage' : 'addPage',
       file: {
         title: '',
         description: '',
-        data_url: ''
+        file_url: ''
       },
       file_data: null,
-      progressBar: 0
+      progressBar: 0,
+      baseIMage: 'https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg',
+      good: this.data?.file_url
     }
   },
   methods: {
@@ -91,18 +98,43 @@ export default {
       this.file_data = event.target.files[0]
       this.onUpload()
     },
+    onPickFile () {
+      this.$refs.input.click()
+    },
     deleteFileUpload () {
-      // Create a reference to the file to delete
-      var desertRef = storage.ref(`media/${this.file_data?.name}`)
-
-      // Delete the file
-      desertRef.delete().then(function () {
-        // File deleted successfully
-      }).catch(function (error) {
-        // Uh-oh, an error occurred!
-        console.log(error)
-      })
+      if (this.file_data) {
+        // Create a reference to the file to delete
+        const desertRef = storage.ref(`media/${this.file_data?.name}`)
+        // Delete the file
+        desertRef.delete().then(function () {
+          // File deleted successfully
+        }).catch(function (error) {
+          // Uh-oh, an error occurred!
+          console.log(error)
+        })
+      } else {
+        console.log('not handle')
+      }
     }
+    // baseIMage () {
+    //   const baseImage = 'https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg'
+    //   if (this.type === 'editPage') {
+    //     return this.file.data_url
+    //   } else {
+    //     return baseImage
+    //   }
+    // }
+  },
+  created () {
+    if (this.$route.params?.id) {
+      this.$store.dispatch('getImageById', { id: this.$route.params?.id })
+      this.file = this.data
+      console.log('good')
+    }
+    console.log(this.good)
+  },
+  computed: {
+    ...mapState(['data'])
   }
 }
 </script>
