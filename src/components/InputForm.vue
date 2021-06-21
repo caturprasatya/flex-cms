@@ -1,7 +1,7 @@
 <template>
-  <div class="relative min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative items-center">
-    <div class="absolute bg-black opacity-60 inset-0 z-0"/>
-    <div class="sm:max-w-lg w-full p-10 bg-white shadow rounded-xl z-10">
+  <div class="relative min-h-screen flex justify-center py-12 px-4 sm:px-6 lg:px-8 relative items-center">
+    <div class="absolute opacity-60 inset-0 z-0"/>
+    <div class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
     <div class="text-center">
       <h2 class="mt-5 text-3xl font-bold text-gray-900">
         File Upload!
@@ -11,20 +11,23 @@
       <form class="mt-8 space-y-3" action="#" method="POST">
         <div class="grid grid-cols-1 space-y-2">
             <label class="text-sm font-bold text-gray-500 tracking-wide">Title</label>
-                <input class="text-base p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" type="" placeholder="mail@gmail.com">
+                <input class="text-base p-2 border bg-gray-200 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" type="" placeholder="mail@gmail.com">
         </div>
         <div class="grid grid-cols-1 space-y-2">
           <label class="text-sm font-bold text-gray-500 tracking-wide">Description</label>
-              <textarea class="text-base p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" type="" placeholder="mail@gmail.com" />
+              <textarea class="text-base p-2 bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" type="" placeholder="mail@gmail.com" />
         </div>
         <div class="grid grid-cols-1 space-y-2">
           <label class="text-sm font-bold text-gray-500 tracking-wide">Attach Document</label>
           <div class="flex items-center justify-center w-full">
+              <div v-if="type === 'editPage'" class="absolute top-0 right-0 -mt-3 mr-3">
+                  <div class="rounded-full bg-indigo-500 text-white text-xs py-1 pl-2 pr-3 leading-none"><i class="mdi mdi-fire text-base align-middle"></i> <span class="align-middle">Delete</span></div>
+              </div>
               <label class="flex flex-col rounded-lg border-4 border-dashed w-full h-60 p-10 group text-center">
                   <div class="h-full w-full text-center flex flex-col items-center justify-center items-center  ">
                       <div class="flex flex-auto max-h-48 w-2/5 mx-auto -mt-10">
                       <img class="has-mask h-36 object-center"
-                      :src="data.file_url" alt="freepik image">
+                      :src="file.image_url" alt="freepik image">
                       </div>
                       <p class="pointer-none text-gray-500 "><span class="text-sm">Drag and drop</span> files here <br /> or <a @click="onPickFile" id="" class="text-blue-600 hover:underline">select a file</a> from your computer</p>
                   </div>
@@ -54,19 +57,17 @@ import { mapState } from 'vuex'
 import { storage } from '../configs/firebase'
 
 export default {
-  name: 'Input Form',
+  name: 'InputForm',
   data () {
     return {
       type: this.$route.params?.id ? 'editPage' : 'addPage',
       file: {
         title: '',
         description: '',
-        file_url: ''
+        image_url: 'https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg'
       },
       file_data: null,
-      progressBar: 0,
-      baseIMage: 'https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg',
-      good: this.data?.file_url
+      progressBar: 0
     }
   },
   methods: {
@@ -116,22 +117,12 @@ export default {
         console.log('not handle')
       }
     }
-    // baseIMage () {
-    //   const baseImage = 'https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg'
-    //   if (this.type === 'editPage') {
-    //     return this.file.data_url
-    //   } else {
-    //     return baseImage
-    //   }
-    // }
   },
   created () {
     if (this.$route.params?.id) {
-      this.$store.dispatch('getImageById', { id: this.$route.params?.id })
       this.file = this.data
-      console.log('good')
+      console.log(this.data)
     }
-    console.log(this.good)
   },
   computed: {
     ...mapState(['data'])

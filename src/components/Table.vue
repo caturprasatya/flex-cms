@@ -1,19 +1,19 @@
 <template>
   <!-- component -->
-        <div class="min-w-screen min-h-screen bg-gray-100 flex justify-center bg-gray-100 font-sans overflow-hidden my-0">
-            <div class="w-full lg:w-5/6">
-                <div class="bg-white shadow-md rounded my-6">
+        <div class="min-w-screen min-h-screen flex justify-center bg-gray-600 font-sans border-dark rounded overflow-hidden my-0">
+            <div class="w-full p-10">
+                <div class="bg-transparent shadow-md rounded my-6">
                     <table class="min-w-max w-full table-auto">
                         <thead>
-                            <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                            <tr class="bg-gray-900 text-gray-100 uppercase text-sm leading-normal">
                                 <th class="py-3 px-6 text-left">Title</th>
                                 <th class="py-3 px-6 text-left">Description</th>
                                 <th class="py-3 px-6 text-center">Status</th>
                                 <th class="py-3 px-6 text-center">Actions</th>
                             </tr>
                         </thead>
-                        <tbody v-for="(product, index) in filteredProduct" :key="index" class="text-gray-600 text-sm font-light">
-                            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                        <tbody v-for="(product, index) in filteredProduct" :key="index" class="text-gray-100 text-sm font-light">
+                            <tr class="border-b border-gray-200 hover:bg-gray-400">
                                 <td class="py-3 px-6 text-left whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="mr-2">
@@ -94,5 +94,45 @@ export default {
 </script>
 
 <style>
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
 
+.animated.faster {
+  -webkit-animation-duration: 500ms;
+  animation-duration: 500ms;
+}
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+
+.fadeOut {
+  -webkit-animation-name: fadeOut;
+  animation-name: fadeOut;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
 </style>

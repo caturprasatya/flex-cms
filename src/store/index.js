@@ -12,7 +12,7 @@ export default new Vuex.Store({
     data: {
       title: '',
       description: '',
-      file_url: 'https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg'
+      image_url: ''
     },
     search: '',
     sideBarOpen: false
@@ -123,7 +123,6 @@ export default new Vuex.Store({
       }
     },
     async getImageById ({ commit, dispatch }, { id }) {
-      console.log(id)
       try {
         const { data } = await axios({
           method: 'GET',
@@ -132,6 +131,7 @@ export default new Vuex.Store({
             access_token: localStorage.getItem('access_token')
           }
         })
+        console.log(data)
         commit('setImage', data)
       } catch (error) {
         dispatch('errorsHandler', error)
