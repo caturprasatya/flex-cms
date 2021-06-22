@@ -9,19 +9,6 @@ import LoginForm from '../components/LoginForm.vue'
 
 export default {
   name: 'Login',
-  data () {
-    return {
-      user: {
-        email: '',
-        password: ''
-      }
-    }
-  },
-  methods: {
-    submitUserLogin () {
-      this.$store.dispatch('processLogin', this.user)
-    }
-  },
   components: {
     LoginForm
   }

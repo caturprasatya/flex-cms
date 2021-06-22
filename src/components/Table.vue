@@ -66,7 +66,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import Swal from 'sweetalert2'
-import CardModal from '@/components/CardModal.vue'
+import CardModal from '@/components/ui/CardModal.vue'
 
 export default {
   name: 'Table',

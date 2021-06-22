@@ -5,14 +5,17 @@
       <h1>Sign in</h1>
       <div class="input-field"><input placeholder="Email" v-bind="user.email" class="validate"></div>
       <div class="input-field"><input placeholder="Password" v-bind="user.password" class="validate"></div>
-        <button class="second-button">Sign in</button>
+        <button class="second-button" @click.prevent="submitUserLogin">Sign in</button>
         <p>Forgot password? <a href="/signup.html">Send Email</a></p>
     </div>
     </div>
+    <Alert />
   </div>
 </template>
 
 <script>
+import Alert from './ui/Alert.vue'
+
 export default {
   name: 'LoginForm',
   data () {
@@ -26,11 +29,14 @@ export default {
   },
   methods: {
     submitUserLogin () {
-      this.$store.dispatch('processLogin', this.user)
+      this.$store.dispatch('userLogin', this.user)
     },
     togglePopup () {
       this.isPopup = !this.isPopup
     }
+  },
+  components: {
+    Alert
   }
 }
 </script>
