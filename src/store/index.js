@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Swal from 'sweetalert2'
 
 import axios from '../configs/axios'
 import router from '../router'
@@ -44,11 +45,10 @@ export default new Vuex.Store({
       if (payload.status === 400) {
         errors = ''
         payload.data.message.forEach(error => {
-          console.log(error)
           errors += `- ${error} \r\n`
         })
       }
-      Vue.swal.fire({
+      Swal.fire({
         icon: 'error',
         text: `${errors}`
       })
@@ -65,8 +65,8 @@ export default new Vuex.Store({
         })
         localStorage.setItem('access_token', data.access_token)
         router.push('/images')
-      } catch (error) {
-        dispatch('errorsHandler', error)
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
       }
     },
     async fetchImages ({ commit, dispatch }) {
@@ -80,8 +80,8 @@ export default new Vuex.Store({
         })
         console.log(data)
         commit('setImages', data)
-      } catch (error) {
-        dispatch('errorsHandler', error)
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
       }
     },
     async addImage ({ dispatch }, payload) {
@@ -105,8 +105,8 @@ export default new Vuex.Store({
           }
         })
         router.push('/galery')
-      } catch (error) {
-        dispatch('errorsHandler', error)
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
       }
     },
     async editImage ({ dispatch }, payload) {
@@ -122,8 +122,8 @@ export default new Vuex.Store({
         })
         dispatch('fetchImages')
         router.push('/galery')
-      } catch (error) {
-        dispatch('errorsHandler', error)
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
       }
     },
     async getImageById ({ commit, dispatch }, { id }) {
@@ -138,8 +138,8 @@ export default new Vuex.Store({
         commit('editPage', data)
         commit('setImage', data)
         router.push(`/edit/${id}`)
-      } catch (error) {
-        dispatch('errorsHandler', error)
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
       }
     },
     async deleteImages ({ dispatch }, { id }) {
@@ -153,13 +153,13 @@ export default new Vuex.Store({
         })
         dispatch('fetchImages')
         router.push('/images')
-        Vue.swal.fire(
+        Swal.fire(
           'Deleted!',
           'Your file has been deleted.',
           'success'
         )
-      } catch (error) {
-        dispatch('errorsHandler', error)
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
       }
     }
   },

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-screen flex justify-center py-12 px-4 sm:px-6 lg:px-8 items-center">
+  <div class="relative min-h-screen flex justify-center py-3 px-4 sm:px-6 lg:px-8 items-center">
     <div class="absolute opacity-60 inset-0 z-0"/>
     <div v-if="$route.name === 'Edit File' && !$store.isEditPage">
       <blockquote>

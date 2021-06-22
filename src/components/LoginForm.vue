@@ -1,20 +1,16 @@
 <template>
-  <div class="w-full bg-gray-700 m-0">
-    <div class="popup active" id="popup-1">
-    <div class="content lg:w-6/12 md:w-6/12">
+  <div class="w-full bg-gray-700 m-0 flex flex-col">
+    <div class="active content lg:w-6/12 md:w-6/12">
       <h1>Sign in</h1>
       <div class="input-field"><input placeholder="Email" v-bind="user.email" class="validate"></div>
       <div class="input-field"><input placeholder="Password" v-bind="user.password" class="validate"></div>
         <button class="second-button" @click.prevent="submitUserLogin">Sign in</button>
         <p>Forgot password? <a href="/signup.html">Send Email</a></p>
     </div>
-    </div>
-    <Alert />
   </div>
 </template>
 
 <script>
-import Alert from './ui/Alert.vue'
 
 export default {
   name: 'LoginForm',
@@ -36,20 +32,18 @@ export default {
     }
   },
   components: {
-    Alert
   }
 }
 </script>
 
 <style>
-.popup .content {
+.content {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-150%) scale(0);
   width: 390px;
   height: 450px;
-  z-index: 2;
   text-align: center;
   padding: 20px;
   border-radius: 20px;
@@ -59,7 +53,7 @@ export default {
   z-index: 1;
 }
 
-.popup.active .content {
+.active.content {
   transition: all 300ms ease-in-out;
   transform: translate(-50%,-50%) scale(1);
 }
