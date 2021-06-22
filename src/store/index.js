@@ -15,7 +15,8 @@ export default new Vuex.Store({
       image_url: ''
     },
     search: '',
-    sideBarOpen: false
+    sideBarOpen: false,
+    isEditPage: false
   },
   mutations: {
     setImages (state, payload) {
@@ -29,6 +30,9 @@ export default new Vuex.Store({
     },
     toggleSidebar (state) {
       state.sideBarOpen = !state.sideBarOpen
+    },
+    editPage (state) {
+      state.isEditPage = !state.isEditPage
     }
   },
   actions: {
@@ -131,8 +135,9 @@ export default new Vuex.Store({
             access_token: localStorage.getItem('access_token')
           }
         })
-        console.log(data)
+        commit('editPage', data)
         commit('setImage', data)
+        router.push(`/edit/${id}`)
       } catch (error) {
         dispatch('errorsHandler', error)
       }

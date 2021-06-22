@@ -1,7 +1,16 @@
 <template>
-  <div class="relative min-h-screen flex justify-center py-12 px-4 sm:px-6 lg:px-8 relative items-center">
+  <div class="relative min-h-screen flex justify-center py-12 px-4 sm:px-6 lg:px-8 items-center">
     <div class="absolute opacity-60 inset-0 z-0"/>
-    <div class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
+    <div v-if="$route.name === 'Edit File' && !$store.isEditPage">
+      <blockquote>
+        <p class="text-lg font-semibold">
+          “Tailwind CSS is the only framework that I've seen scale
+          on large teams. It’s easy to customize, adapts to any design,
+          and the build size is tiny.”
+        </p>
+     </blockquote>
+    </div>
+    <div v-else class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
     <div class="text-center">
       <h2 class="mt-5 text-3xl font-bold text-gray-900">
         File Upload!
@@ -24,7 +33,7 @@
                   <div class="rounded-full bg-indigo-500 text-white text-xs py-1 pl-2 pr-3 leading-none"><i class="mdi mdi-fire text-base align-middle"></i> <span class="align-middle">Delete</span></div>
               </div>
               <label class="flex flex-col rounded-lg border-4 border-dashed w-full h-60 p-10 group text-center">
-                  <div class="h-full w-full text-center flex flex-col items-center justify-center items-center  ">
+                  <div class="h-full w-full text-center flex flex-col justify-center items-center  ">
                       <div class="flex flex-auto max-h-48 w-2/5 mx-auto -mt-10">
                       <img class="has-mask h-36 object-center"
                       :src="file.image_url" alt="freepik image">
@@ -39,7 +48,7 @@
           </div>
         </div>
           <p class="text-sm text-gray-300">
-              <span>File type: types of videos and types of images</span>
+              <span>File type: types of videos and types of images {{}} </span>
           </p>
         <div>
           <button type="submit" class="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
@@ -62,9 +71,11 @@ export default {
     return {
       type: this.$route.params?.id ? 'editPage' : 'addPage',
       file: {
-        title: '',
-        description: '',
-        image_url: 'https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg'
+        title: this.$route.params?.id ? this.data.title : '',
+        description: this.$route.params?.id ? this.data.description : '',
+        image_url: this.$route.params?.id
+          ? this.data.image_url
+          : 'https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg'
       },
       file_data: null,
       progressBar: 0
@@ -116,12 +127,6 @@ export default {
       } else {
         console.log('not handle')
       }
-    }
-  },
-  created () {
-    if (this.$route.params?.id) {
-      this.file = this.data
-      console.log(this.data)
     }
   },
   computed: {
