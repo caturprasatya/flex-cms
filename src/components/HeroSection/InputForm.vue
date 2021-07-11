@@ -63,7 +63,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { storage } from '../configs/firebase'
+import { storage } from '../../configs/firebase'
 
 export default {
   name: 'InputForm',

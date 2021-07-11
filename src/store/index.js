@@ -1,7 +1,6 @@
+import Swal from 'sweetalert2'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Swal from 'sweetalert2'
-
 import axios from '../configs/axios'
 import router from '../router'
 
@@ -9,25 +8,36 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    galery: [],
-    data: {
-      title: '',
-      description: '',
-      image_url: ''
-    },
+    popularWorks: [],
+    heroSections: [],
+    clients: [],
+    detailPopularWork: {},
+    detailHeroSection: {},
+    isLoadingDetailPW: false,
     search: '',
     sideBarOpen: false,
-    isEditPage: false
+    isEditPage: false,
+    token: localStorage.getItem('access_token') || ''
   },
   mutations: {
-    setImages (state, payload) {
-      state.galery = payload
+    setPopularWorks (state, payload) {
+      state.popularWorks = payload
     },
-    setImage (state, payload) {
-      state.data = payload
+    setDetailPopularWork (state, payload) {
+      state.detailPopularWork = payload
     },
-    setSearch (state, payload) {
-      state.search = payload
+    setHeroSections (state, payload) {
+      state.heroSections = payload
+    },
+    setDetailHeroSection (state, payload) {
+      state.detailHeroSection = payload
+      console.log(payload)
+    },
+    setLoadingDetail (state, boolean) {
+      state.isLoadingDetailPW = boolean
+    },
+    setClients (state, payload) {
+      state.clients = payload
     },
     toggleSidebar (state) {
       state.sideBarOpen = !state.sideBarOpen
@@ -54,47 +64,139 @@ export default new Vuex.Store({
       })
     },
     async userLogin ({ dispatch }, payload) {
+      console.log(payload)
       try {
         const { data } = await axios({
           method: 'POST',
           url: '/login',
-          data: {
-            email: payload.email,
-            password: payload.password
-          }
+          data: payload
         })
         localStorage.setItem('access_token', data.access_token)
-        router.push('/images')
+        router.push('/')
       } catch ({ response }) {
+        console.log(response)
         dispatch('errorsHandler', response)
       }
     },
-    async fetchImages ({ commit, dispatch }) {
+    async fetchPopularWorks ({ commit, dispatch }) {
       try {
         const { data } = await axios({
           method: 'GET',
-          url: '/products',
+          url: '/',
           headers: {
             access_token: localStorage.getItem('access_token')
           }
         })
-        console.log(data)
-        commit('setImages', data)
+        // console.log(data)
+        commit('setPopularWorks', data.items)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async addImage ({ dispatch }, payload) {
+    async addPopularWork ({ dispatch }, payload) {
       try {
         await axios({
           method: 'GET',
-          url: '/images',
+          url: '/',
           headers: {
             access_token: localStorage.getItem('access_token')
           },
           data: payload
         })
-        dispatch('fetchImages')
+        dispatch('fetchPopularWorks')
+        Swal({
+          title: 'Product Added',
+          showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+          }
+        })
+        router.push('/popularWork')
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async editPopularWork ({ dispatch }, payload) {
+      const { id } = payload
+      try {
+        await axios({
+          method: 'PUT',
+          url: `/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          },
+          data: payload
+        })
+        dispatch('fetchPopularWorks')
+        router.push('/popularWork')
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async getPopularWorkById ({ commit, dispatch }, { id }) {
+      try {
+        const { data } = await axios({
+          method: 'GET',
+          url: `/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        commit('editPage', data)
+        commit('setDetailPopularWork', data)
+        router.push(`/edit/${id}`)
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async deletePopularWorkById ({ dispatch }, id) {
+      try {
+        await axios({
+          method: 'DELETE',
+          url: `/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        dispatch('fetchPopularWorks')
+        router.push('/popularWork')
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    // !================== HeroSection ================================
+    async fetchHeroSections ({ commit, dispatch }) {
+      try {
+        const { data } = await axios({
+          method: 'GET',
+          url: '/banner',
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        commit('setHeroSections', data.videos)
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async addHeroSection ({ dispatch }, payload) {
+      try {
+        await axios({
+          method: 'POST',
+          url: '/banner',
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          },
+          data: payload
+        })
+        dispatch('fetchPopularWorks')
         Vue.swal({
           title: 'Product Added',
           showClass: {
@@ -104,55 +206,91 @@ export default new Vuex.Store({
             popup: 'animate__animated animate__fadeOutUp'
           }
         })
-        router.push('/galery')
+        router.push('/banner')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async editImage ({ dispatch }, payload) {
+    async editHeroSection ({ dispatch }, payload) {
       const { id } = payload
       try {
         await axios({
           method: 'PUT',
-          url: `/images/${id}`,
+          url: `/banner/${id}`,
           headers: {
             access_token: localStorage.getItem('access_token')
           },
           data: payload
         })
-        dispatch('fetchImages')
-        router.push('/galery')
+        dispatch('fetchHeroSections')
+        router.push('/banner')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async getImageById ({ commit, dispatch }, { id }) {
+    async getHeroSectionById ({ commit, dispatch }, { id }) {
       try {
         const { data } = await axios({
           method: 'GET',
-          url: `/products/${id}`,
+          url: `/banner/${id}`,
           headers: {
             access_token: localStorage.getItem('access_token')
           }
         })
         commit('editPage', data)
-        commit('setImage', data)
-        router.push(`/edit/${id}`)
+        commit('set', data)
+        router.push(`/HeroSectionEdit/${id}`)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async deleteImages ({ dispatch }, { id }) {
+    async deleteHeroSections ({ dispatch }, { id }) {
       try {
         await axios({
           method: 'DELETE',
-          url: `/images/${id}`,
+          url: `/banner/${id}`,
           headers: {
             access_token: localStorage.getItem('access_token')
           }
         })
-        dispatch('fetchImages')
-        router.push('/images')
+        dispatch('fetchHeroSections')
+        router.push('/banner')
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    // !! ============================ CLIENT =========================
+    async fetchClients ({ commit, dispatch }) {
+      try {
+        const { data } = await axios({
+          method: 'GET',
+          url: '/client',
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        // console.log(data)
+        commit('setClients', data.users)
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async deleteClient ({ dispatch }, { id }) {
+      try {
+        await axios({
+          method: 'DELETE',
+          url: `/client/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        dispatch('fetchClients')
+        router.push('/')
         Swal.fire(
           'Deleted!',
           'Your file has been deleted.',
@@ -170,11 +308,17 @@ export default new Vuex.Store({
       return state.sideBarOpen
     },
     filteredProduct: state => {
-      console.log(state.galery)
-      return state.galery
+      return state.popularWorks
         .filter(file =>
-          file.name.toLowerCase().includes(state.search.toLowerCase())
+          file.title.toLowerCase().includes(state.search.toLowerCase())
         )
-    }
+    },
+    // detailPopularWorks:state => {
+    //   return state.popularWorks
+    //     .map(file =>
+    //       file.title.toLowerCase().includes(state.search.toLowerCase())
+    //     )
+    // },
+    isAuthenticated: state => !!state.token
   }
 })

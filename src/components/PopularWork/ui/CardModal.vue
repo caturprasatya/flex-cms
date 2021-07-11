@@ -15,16 +15,34 @@
           <span class="px-2 hover:bg-gray-300 cursor-pointer rounded"><i class="fas fa-ellipsis-h pt-2 text-lg"></i></span>
         </div>
         <div class="flex justify-center">
-          <img class="lg:w-3/4 md:w-1/3 sm:w-1/2 bg-cover" src="https://3.bp.blogspot.com/-Chu20FDi9Ek/WoOD-ehQ29I/AAAAAAAAK7U/mc4CAiTYOY8VzOFzBKdR52aLRiyjqu0MwCLcBGAs/s1600/DSC04596%2B%25282%2529.JPG">
+          <iframe v-if="detailPopularWork.type === 'video'"
+              width="100%"
+              height="400"
+              :src="detailPopularWork.video_url"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              seamless
+              scrolling = "no"
+            >
+            </iframe>
+          <img
+            v-else
+            width="100%"
+            height="400"
+            class="lg:w-3/4 md:w-1/3 sm:w-1/2 bg-cover"
+            :src="detailPopularWork.url"
+            >
         </div>
         <div class="px-3 pb-2">
+          <span class="mr-2 font-extrabold font-mono text-xl pt-2"> {{detailPopularWork.title}} </span>
           <div class="pt-2">
             <i class="far fa-heart cursor-pointer"></i>
-            <span class="text-sm text-gray-400 font-medium">Description</span>
+            <span class="text-sm text-gray-400 font-medium font-mono">Description</span>
           </div>
           <div class="pt-1">
-            <div class="mb-2 text-sm">
-              <span class="font-medium mr-2">braydoncoyer</span> Lord of the Rings is my favorite film-series. One day I'll make my way to New Zealand to visit the Hobbiton set!
+            <div class="mb-2 text-sm font-mono font-extralight">
+              {{ detailPopularWork.description }}
             </div>
           </div>
           <!--footer-->
@@ -42,6 +60,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'CardModal',
   props: [
@@ -51,6 +71,9 @@ export default {
     hideModal () {
       this.$emit('hideModal')
     }
+  },
+  computed: {
+    ...mapState(['detailPopularWork'])
   }
 }
 </script>

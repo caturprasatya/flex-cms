@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Form from '@/components/PopularWork/InputForm.vue'
+import Form from '@/components/HeroSection/InputForm.vue'
 
 export default {
   components: {

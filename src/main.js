@@ -5,6 +5,7 @@ import router from './router'
 import store from './store'
 
 import 'tailwindcss/tailwind.css'
+import 'alpinejs'
 
 Vue.config.productionTip = false
 

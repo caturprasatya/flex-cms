@@ -47,7 +47,9 @@ export default {
     ...mapState(['sideBarOpen'])
   },
   created () {
-    this.$store.dispatch('fetchImages')
+    this.$store.dispatch('fetchPopularWorks')
+    this.$store.dispatch('fetchHeroSections')
+    this.$store.dispatch('fetchClients')
   }
 }
 </script>
