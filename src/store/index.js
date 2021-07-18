@@ -10,7 +10,7 @@ export default new Vuex.Store({
   state: {
     popularWorks: [],
     heroSections: [],
-    clients: [],
+    categories: [],
     detailPopularWork: {},
     detailHeroSection: {},
     isLoadingDetailPW: false,
@@ -36,8 +36,8 @@ export default new Vuex.Store({
     setLoadingDetail (state, boolean) {
       state.isLoadingDetailPW = boolean
     },
-    setClients (state, payload) {
-      state.clients = payload
+    setCategories (state, payload) {
+      state.categories = payload
     },
     toggleSidebar (state) {
       state.sideBarOpen = !state.sideBarOpen
@@ -94,9 +94,10 @@ export default new Vuex.Store({
       }
     },
     async addPopularWork ({ dispatch }, payload) {
+      console.log(payload)
       try {
         await axios({
-          method: 'GET',
+          method: 'POST',
           url: '/',
           headers: {
             access_token: localStorage.getItem('access_token')
@@ -104,16 +105,16 @@ export default new Vuex.Store({
           data: payload
         })
         dispatch('fetchPopularWorks')
-        Swal({
-          title: 'Product Added',
-          showClass: {
-            popup: 'animate__animated animate__fadeInDown'
-          },
-          hideClass: {
-            popup: 'animate__animated animate__fadeOutUp'
-          }
-        })
-        router.push('/popularWork')
+        // Swal({
+        //   title: 'Product Added',
+        //   showClass: {
+        //     popup: 'animate__animated animate__fadeInDown'
+        //   },
+        //   hideClass: {
+        //     popup: 'animate__animated animate__fadeOutUp'
+        //   }
+        // })
+        router.push('/')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
@@ -130,7 +131,7 @@ export default new Vuex.Store({
           data: payload
         })
         dispatch('fetchPopularWorks')
-        router.push('/popularWork')
+        router.push('/')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
@@ -161,7 +162,7 @@ export default new Vuex.Store({
           }
         })
         dispatch('fetchPopularWorks')
-        router.push('/popularWork')
+        router.push('/')
         Swal.fire(
           'Deleted!',
           'Your file has been deleted.',
@@ -181,12 +182,14 @@ export default new Vuex.Store({
             access_token: localStorage.getItem('access_token')
           }
         })
+        console.log(data)
         commit('setHeroSections', data.videos)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
     async addHeroSection ({ dispatch }, payload) {
+      console.log(payload)
       try {
         await axios({
           method: 'POST',
@@ -196,16 +199,16 @@ export default new Vuex.Store({
           },
           data: payload
         })
-        dispatch('fetchPopularWorks')
-        Vue.swal({
-          title: 'Product Added',
-          showClass: {
-            popup: 'animate__animated animate__fadeInDown'
-          },
-          hideClass: {
-            popup: 'animate__animated animate__fadeOutUp'
-          }
-        })
+        dispatch('fetchHeroSections')
+        // Vue.swal({
+        //   title: 'Product Added',
+        //   showClass: {
+        //     popup: 'animate__animated animate__fadeInDown'
+        //   },
+        //   hideClass: {
+        //     popup: 'animate__animated animate__fadeOutUp'
+        //   }
+        // })
         router.push('/banner')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
@@ -244,7 +247,7 @@ export default new Vuex.Store({
         dispatch('errorsHandler', response)
       }
     },
-    async deleteHeroSections ({ dispatch }, { id }) {
+    async deleteHeroSectionById ({ dispatch }, id) {
       try {
         await axios({
           method: 'DELETE',
@@ -254,7 +257,6 @@ export default new Vuex.Store({
           }
         })
         dispatch('fetchHeroSections')
-        router.push('/banner')
         Swal.fire(
           'Deleted!',
           'Your file has been deleted.',
@@ -264,42 +266,42 @@ export default new Vuex.Store({
         dispatch('errorsHandler', response)
       }
     },
-    // !! ============================ CLIENT =========================
-    async fetchClients ({ commit, dispatch }) {
+    // !! ============================ CATEGORY =========================
+    async fetchCategories ({ commit, dispatch }) {
       try {
         const { data } = await axios({
           method: 'GET',
-          url: '/client',
+          url: '/category',
           headers: {
             access_token: localStorage.getItem('access_token')
           }
         })
         // console.log(data)
-        commit('setClients', data.users)
-      } catch ({ response }) {
-        dispatch('errorsHandler', response)
-      }
-    },
-    async deleteClient ({ dispatch }, { id }) {
-      try {
-        await axios({
-          method: 'DELETE',
-          url: `/client/${id}`,
-          headers: {
-            access_token: localStorage.getItem('access_token')
-          }
-        })
-        dispatch('fetchClients')
-        router.push('/')
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
+        commit('setCategories', data.categories)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     }
+    // async deleteClient ({ dispatch }, { id }) {
+    //   try {
+    //     await axios({
+    //       method: 'DELETE',
+    //       url: `/client/${id}`,
+    //       headers: {
+    //         access_token: localStorage.getItem('access_token')
+    //       }
+    //     })
+    //     dispatch('fetchCategories')
+    //     router.push('/')
+    //     Swal.fire(
+    //       'Deleted!',
+    //       'Your file has been deleted.',
+    //       'success'
+    //     )
+    //   } catch ({ response }) {
+    //     dispatch('errorsHandler', response)
+    //   }
+    // }
   },
   modules: {
   },

@@ -49,7 +49,7 @@ export default {
   created () {
     this.$store.dispatch('fetchPopularWorks')
     this.$store.dispatch('fetchHeroSections')
-    this.$store.dispatch('fetchClients')
+    this.$store.dispatch('fetchCategories')
   }
 }
 </script>
