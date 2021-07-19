@@ -31,7 +31,6 @@ export default new Vuex.Store({
     },
     setDetailHeroSection (state, payload) {
       state.detailHeroSection = payload
-      // console.log(payload, '=============> payoad')
     },
     setLoadingDetail (state, boolean) {
       state.isLoadingDetailPW = boolean
@@ -296,6 +295,22 @@ export default new Vuex.Store({
           'Your file has been deleted.',
           'success'
         )
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async addCategory ({ dispatch }, payload) {
+      try {
+        await axios({
+          method: 'POST',
+          url: '/category',
+          data: payload,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        dispatch('fetchCategories')
+        router.push('/')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }

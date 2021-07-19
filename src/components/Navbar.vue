@@ -25,7 +25,7 @@
 
     <!-- dropdown menu -->
     <div class="absolute bg-gray-300 border border-t-0 shadow-xl text-gray-700 rounded-b-lg w-48 bottom-10 right-0 mr-6" :class="dropDownOpen ? '' : 'hidden'">
-      <a href="#" class="block px-4 py-2 hover:bg-gray-200">Logout</a>
+      <a href="#" class="block px-4 py-2 hover:bg-gray-200" @click.prevent="logout">Logout</a>
     </div>
     <!-- dropdown menu end -->
   </div>
@@ -33,6 +33,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import router from '../router/'
 
 export default {
   name: 'Navbar',
@@ -47,6 +48,10 @@ export default {
   methods: {
     toggleSidebar () {
       this.$store.dispatch('toggleSidebar')
+    },
+    logout () {
+      localStorage.removeItem('access_token')
+      router.push('/login')
     }
   }
 }

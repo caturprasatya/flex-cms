@@ -3,11 +3,11 @@
     <div class="active content lg:w-6/12 md:w-6/12">
       <h1>Sign in</h1>
       <div class="input-field">
-        <input placeholder="Email" v-model="user.email" class="validate"></div>
+        <input placeholder="Email" type="email" v-model="user.email" class="validate"></div>
       <div class="input-field">
-        <input placeholder="Password" v-model="user.password" class="validate"></div>
+        <input placeholder="Password" type="password" v-model="user.password" class="validate"></div>
         <button class="second-button" @click.prevent="submitUserLogin">Sign in</button>
-        <p>Forgot password? <a href="/signup.html">Send Email</a></p>
+        <!-- <p>Forgot password? <a href="/signup.html">Send Email</a></p> -->
     </div>
   </div>
 </template>
