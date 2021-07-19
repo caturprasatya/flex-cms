@@ -56,12 +56,12 @@ const routes = [
         component: () => import('../views/main/HeroSection/FormHeroSection.vue')
       },
       {
-        path: '/editPopuaraWork/:id',
+        path: '/PopuaraWorkEdit/:id',
         name: 'Edit Item Popular Work',
         component: () => import('../views/main/PopularWorks/FormPopularWork.vue')
       },
       {
-        path: '/editHeroSection/:id',
+        path: '/HeroSectionEdit/:id',
         name: 'Edit Item Hero Section',
         component: () => import('../views/main/HeroSection/FormHeroSection.vue')
       }

@@ -31,7 +31,7 @@ export default new Vuex.Store({
     },
     setDetailHeroSection (state, payload) {
       state.detailHeroSection = payload
-      console.log(payload)
+      // console.log(payload, '=============> payoad')
     },
     setLoadingDetail (state, boolean) {
       state.isLoadingDetailPW = boolean
@@ -42,7 +42,7 @@ export default new Vuex.Store({
     toggleSidebar (state) {
       state.sideBarOpen = !state.sideBarOpen
     },
-    editPage (state) {
+    editPage (state, _) {
       state.isEditPage = !state.isEditPage
     }
   },
@@ -64,7 +64,6 @@ export default new Vuex.Store({
       })
     },
     async userLogin ({ dispatch }, payload) {
-      console.log(payload)
       try {
         const { data } = await axios({
           method: 'POST',
@@ -74,7 +73,6 @@ export default new Vuex.Store({
         localStorage.setItem('access_token', data.access_token)
         router.push('/')
       } catch ({ response }) {
-        console.log(response)
         dispatch('errorsHandler', response)
       }
     },
@@ -94,7 +92,6 @@ export default new Vuex.Store({
       }
     },
     async addPopularWork ({ dispatch }, payload) {
-      console.log(payload)
       try {
         await axios({
           method: 'POST',
@@ -136,7 +133,7 @@ export default new Vuex.Store({
         dispatch('errorsHandler', response)
       }
     },
-    async getPopularWorkById ({ commit, dispatch }, { id }) {
+    async getPopularWorkById ({ commit, dispatch }, { id, isEdit }) {
       try {
         const { data } = await axios({
           method: 'GET',
@@ -145,9 +142,11 @@ export default new Vuex.Store({
             access_token: localStorage.getItem('access_token')
           }
         })
-        commit('editPage', data)
+        // commit('editPage', data)
         commit('setDetailPopularWork', data)
-        router.push(`/edit/${id}`)
+        if (!isEdit) {
+          router.push(`/PopuaraWorkEdit/${id}`)
+        }
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
@@ -182,14 +181,12 @@ export default new Vuex.Store({
             access_token: localStorage.getItem('access_token')
           }
         })
-        console.log(data)
         commit('setHeroSections', data.videos)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
     async addHeroSection ({ dispatch }, payload) {
-      console.log(payload)
       try {
         await axios({
           method: 'POST',
@@ -231,7 +228,7 @@ export default new Vuex.Store({
         dispatch('errorsHandler', response)
       }
     },
-    async getHeroSectionById ({ commit, dispatch }, { id }) {
+    async getHeroSectionById ({ commit, dispatch }, { id, isEdit }) {
       try {
         const { data } = await axios({
           method: 'GET',
@@ -240,9 +237,10 @@ export default new Vuex.Store({
             access_token: localStorage.getItem('access_token')
           }
         })
-        commit('editPage', data)
-        commit('set', data)
-        router.push(`/HeroSectionEdit/${id}`)
+        commit('setDetailHeroSection', data)
+        if (!isEdit) {
+          router.push(`/HeroSectionEdit/${id}`)
+        }
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
@@ -281,27 +279,27 @@ export default new Vuex.Store({
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
+    },
+    async deleteCategory ({ dispatch }, { id }) {
+      try {
+        await axios({
+          method: 'DELETE',
+          url: `/category/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        dispatch('fetchCategories')
+        router.push('/')
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
     }
-    // async deleteClient ({ dispatch }, { id }) {
-    //   try {
-    //     await axios({
-    //       method: 'DELETE',
-    //       url: `/client/${id}`,
-    //       headers: {
-    //         access_token: localStorage.getItem('access_token')
-    //       }
-    //     })
-    //     dispatch('fetchCategories')
-    //     router.push('/')
-    //     Swal.fire(
-    //       'Deleted!',
-    //       'Your file has been deleted.',
-    //       'success'
-    //     )
-    //   } catch ({ response }) {
-    //     dispatch('errorsHandler', response)
-    //   }
-    // }
   },
   modules: {
   },

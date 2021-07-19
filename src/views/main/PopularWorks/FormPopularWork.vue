@@ -11,10 +11,15 @@ export default {
   components: {
     Form
   },
-  created () {
-    if (this.$route.params?.id) {
-      this.$store.dispatch('getImageById', { id: this.$route.params?.id })
+  methods: {
+    reloadEditRouter () {
+      if (this.$route.params?.id) {
+        this.$store.dispatch('getPopularWorkById', { id: this.$route.params?.id, isEdit: true })
+      }
     }
+  },
+  mounted () {
+    this.reloadEditRouter()
   }
 }
 </script>

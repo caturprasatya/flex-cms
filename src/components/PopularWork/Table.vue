@@ -100,7 +100,7 @@ export default {
       })
     },
     populateProduct (id) {
-      this.$store.dispatch('getPopularWorkById', { id })
+      this.$store.dispatch('getPopularWorkById', { id, isEdit: false })
     },
     async showModal (payload) {
       console.log(payload)

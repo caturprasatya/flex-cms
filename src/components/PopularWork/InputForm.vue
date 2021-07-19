@@ -138,8 +138,8 @@ export default {
     return {
       type: this.$route.params?.id ? 'editPage' : 'addPage',
       file: {
-        title: this.$route.params?.id ? this.data.title : '',
-        description: this.$route.params?.id ? this.data.description : '',
+        title: '',
+        description: '',
         url: '',
         type: '',
         CategoryId: 0
@@ -158,14 +158,20 @@ export default {
     setImage: function (output) {
       this.hasImage = true
       this.image = output
+      console.log(output)
     },
     previewFilesVideo (event) {
       this.video = event.target.files[0]
       this.videoUrl = URL.createObjectURL(event.target.files[0])
-      console.log(event.target.files, '========', this.video)
     },
     onUploadImage () {
-      console.log(this.image.dataUrl.split(',')[1])
+      if (this.type === 'editPage' && !this.image && this.file.type === 'photo') {
+        this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
+        return
+      }
+      if (this.type === 'editPage' && !this.image && this.file.type === 'video') {
+        return
+      }
       const uploadTask = storage.ref(`popularWork/${this.image.info?.name}`).putString(this.image.dataUrl.split(',')[1], 'base64', { contentType: 'image/png' })
       uploadTask.on(
         'state_changed',
@@ -183,15 +189,21 @@ export default {
             .getDownloadURL()
             .then(downloadUrl => {
               this.file.url = downloadUrl
-              console.log(downloadUrl)
               if (this.file.type === 'photo') {
                 this.$store.dispatch('addPopularWork', { ...this.file })
+              }
+              if (this.file.type === 'photo' && this.type === 'editPage') {
+                this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
               }
             })
         }
       )
     },
     onUploadVideo () {
+      if (this.type === 'editPage' && !this.video) {
+        this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
+        return
+      }
       const uploadTask = storage.ref(`popularWork/${this.video.name}`).put(this.video)
       uploadTask.on(
         'state_changed',
@@ -211,6 +223,9 @@ export default {
               this.video_url = downloadUrl
               console.log(downloadUrl)
               this.$store.dispatch('addPopularWork', { ...this.file, video_url: this.video_url })
+              if (this.type === 'ediPage') {
+                this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
+              }
             })
         }
       )
@@ -236,10 +251,15 @@ export default {
       } else {
         this.onUploadImage(); this.onUploadVideo()
       }
+    },
+    onEditPage () {
+      this.file = this.$store.state.detailPopularWork
+      this.setImage({ dataUrl: this.file.url, info: 'testing.png' })
+      if (this.file.type === 'video') {
+        this.video = true
+        this.video_url = this.file.video_url
+      }
     }
-    // onChange () {
-    //   this.file.CategoryId
-    // }
   },
   computed: {
     ...mapState(['categories'])
@@ -247,9 +267,8 @@ export default {
   components: {
     ImageUplaoder
   },
-  created () {
-    if (this.type === 'editPage') {
-    }
+  mounted () {
+    this.onEditPage()
   }
 }
 </script>
