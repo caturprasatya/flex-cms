@@ -15,19 +15,18 @@ export default {
       category: ''
     }
   },
-   methods: {
-     inputCategory () {
-       this.$store.dispatch('addCategory', this.category)
-     },
-     keyMonitor (event) {
-       if (event.key === 'enter') {
-         this.inputCategory()
-       }
-     }
-   }
+  methods: {
+    inputCategory () {
+      this.$store.dispatch('addCategory', this.category)
+    },
+    keyMonitor (event) {
+      if (event.key === 'enter') {
+        this.inputCategory()
+      }
+    }
+  }
 }
 </script>
 
 <style>
-
 </style>
