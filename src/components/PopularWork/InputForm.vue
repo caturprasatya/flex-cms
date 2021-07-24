@@ -26,7 +26,6 @@
             class="text-base p-2 bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
             placeholder="Write Desc..." />
         </div>
-
         <div class="grid grid-cols-1 space-y-2">
           <label class="text-sm font-bold text-gray-500 tracking-wide">Category</label>
           <svg class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 232"><path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero"/></svg>
@@ -94,6 +93,15 @@
           </div>
         </div>
         <div
+          v-if="file.type === 'video'"
+          class="grid grid-cols-1 space-y-2">
+          <label class="text-sm font-bold text-gray-500 tracking-wide">Attach Files </label>
+            <textarea
+            v-model="file.description"
+            class="text-base p-2 bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+            placeholder="Copy Your Url" />
+        </div>
+        <!-- <div
         v-if="file.type === 'video'"
         class="grid grid-cols-1 space-y-2 mt-3">
           <label class="text-sm font-bold text-gray-500 tracking-wide">Attach Files</label>
@@ -113,7 +121,7 @@
               </div>
             </label>
           </div>
-        </div>
+        </div> -->
         <div>
           <button type="submit" class="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
             font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
@@ -222,31 +230,36 @@ export default {
         this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
         return
       }
-      const uploadTask = storage.ref(`popularWork/${this.video.name}`).put(this.video)
-      uploadTask.on(
-        'state_changed',
-        snapshot => {
-          const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
-          this.progressBarVideo = progress
-        },
-        error => {
-          console.error(error)
-        },
-        () => {
-          storage
-            .ref('popularWork')
-            .child(this.video.name)
-            .getDownloadURL()
-            .then(downloadUrl => {
-              this.video_url = downloadUrl
-              this.$store.dispatch('addPopularWork', { ...this.file, video_url: this.video_url })
-              if (this.type === 'ediPage') {
-                this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
-              }
-              this.clearFile()
-            })
-        }
-      )
+      if (this.type === 'ediPage') {
+        this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
+      }
+      this.$store.dispatch('addPopularWork', { ...this.file, video_url: this.video_url + 'theme=black&color=red&showinfo=1&modestbranding=1&controls=0&autoplay=1&loop=1&rel=0' })
+
+      // const uploadTask = storage.ref(`popularWork/${this.video.name}`).put(this.video)
+      // uploadTask.on(
+      //   'state_changed',
+      //   snapshot => {
+      //     const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+      //     this.progressBarVideo = progress
+      //   },
+      //   error => {
+      //     console.error(error)
+      //   },
+      //   () => {
+      //     storage
+      //       .ref('popularWork')
+      //       .child(this.video.name)
+      //       .getDownloadURL()
+      //       .then(downloadUrl => {
+      //         this.video_url = downloadUrl
+      //         this.$store.dispatch('addPopularWork', { ...this.file, video_url: this.video_url })
+      //         if (this.type === 'ediPage') {
+      //           this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
+      //         }
+      //         this.clearFile()
+      //       })
+      //   }
+      // )
     },
     deleteFileUpload () {
       if (this.file_data) {

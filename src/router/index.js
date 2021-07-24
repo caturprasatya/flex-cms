@@ -51,6 +51,16 @@ const routes = [
         component: () => import('../views/main/PopularWorks/FormPopularWork.vue')
       },
       {
+        path: '/inputStory',
+        name: 'Input Story',
+        component: () => import('../views/main/Story/FormStory.vue')
+      },
+      {
+        path: '/inputContact',
+        name: 'Input Contact',
+        component: () => import('../views/main/Contact/FormContact.vue')
+      },
+      {
         path: '/inputHeroSection',
         name: 'Input Hero Section',
         component: () => import('../views/main/HeroSection/FormHeroSection.vue')
