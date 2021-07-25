@@ -50,7 +50,7 @@ import Swal from 'sweetalert2'
 // import { AtomSpinner } from 'epic-spinners'
 
 import { mapState } from 'vuex'
-import CardModal from '@/components/HeroSection/ui/CardModalBanner.vue'
+// import CardModal from '@/components/HeroSection/ui/CardModalBanner.vue'
 
 export default {
   name: 'Table',

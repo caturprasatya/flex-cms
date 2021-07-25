@@ -342,7 +342,7 @@ export default new Vuex.Store({
             access_token: localStorage.getItem('access_token')
           }
         })
-        commit('setContacts', data.videos)
+        commit('setContacts', data.users)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
@@ -435,6 +435,7 @@ export default new Vuex.Store({
             access_token: localStorage.getItem('access_token')
           }
         })
+        console.log(data.teks)
         commit('setStories', data.teks)
       } catch ({ response }) {
         dispatch('errorsHandler', response)

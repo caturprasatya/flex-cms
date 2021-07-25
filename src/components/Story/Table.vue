@@ -2,10 +2,6 @@
   <!-- component -->
   <div class="min-w-screen min-h-screen flex justify-center bg-gray-600 font-sans border-dark rounded overflow-hidden my-0">
       <div class="w-full p-10">
-          <CardModal
-          :toggleModalBanner="useModalToBanner"
-          @hideModal="hideModalBanner"
-          />
           <div class="bg-transparent shadow-xl rounded my-6">
               <table class="min-w-max w-full table-auto">
                   <thead>
@@ -14,13 +10,13 @@
                       <th class="py-3 px-6 text-center">Actions</th>
                     </tr>
                   </thead>
-                  <tbody v-for="(item, index) in Stories" :key="index" class="text-gray-100 text-sm font-light">
+                  <tbody v-for="(item, index) in stories" :key="index" class="text-gray-100 text-sm font-light">
                       <tr class="border-b border-gray-200 hover:bg-gray-400">
-                          <td class="py-3 px-6 text-left w-40 whitespace-wrap">
-                              <div class="flex items-center w-40">
+                          <td class="py-3 px-6 text-center max-w-xs h-12 whitespace-wrap">
+                              <div class="flex justify-center items-center max-w-xs">
                                   <!-- <div class="mr-2">
                                   </div> -->
-                                  <span class="font-medium truncate">{{ item.teks }}</span>
+                                  <span class="font-medium">{{ item.teks }}</span>
                               </div>
                           </td>
                           <td class="py-3 px-6 text-center">
@@ -50,7 +46,7 @@ import Swal from 'sweetalert2'
 // import { AtomSpinner } from 'epic-spinners'
 
 import { mapState } from 'vuex'
-import CardModal from '@/components/Story/ui/CardModalBanner.vue'
+// import CardModal from '@/components/Story/ui/CardModalBanner.vue'
 
 export default {
   name: 'Table',
@@ -60,7 +56,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['Stories'])
+    ...mapState(['stories'])
   },
   methods: {
     deleteProduct (id) {
@@ -92,7 +88,7 @@ export default {
     }
   },
   components: {
-    CardModal
+    // CardModal
     // AtomSpinner
   },
   mounted () {
