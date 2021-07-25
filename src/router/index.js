@@ -41,6 +41,21 @@ const routes = [
         component: () => import('../views/main/HeroSection/HeroSection.vue')
       },
       {
+        path: '/category',
+        name: 'Banner',
+        component: () => import('../views/main/Category/Category.vue')
+      },
+      {
+        path: '/story',
+        name: 'Banner',
+        component: () => import('../views/main/Story/Story.vue')
+      },
+      {
+        path: '/contact',
+        name: 'Banner',
+        component: () => import('../views/main/Contact/Contact.vue')
+      },
+      {
         path: '/inputCategory',
         name: 'Input Category',
         component: () => import('../views/main/Category/InputCategory.vue')

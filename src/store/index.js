@@ -37,6 +37,18 @@ export default new Vuex.Store({
     setDetailHeroSection (state, payload) {
       state.detailHeroSection = payload
     },
+    setContacts (state, payload) {
+      state.contacts = payload
+    },
+    setContact (state, payload) {
+      state.detailContact = payload
+    },
+    setStories (state, payload) {
+      state.stories = payload
+    },
+    setStory (state, payload) {
+      state.detailStory = payload
+    },
     setLoadingDetail (state, boolean) {
       state.isLoadingDetailPW = boolean
     },
@@ -423,7 +435,7 @@ export default new Vuex.Store({
             access_token: localStorage.getItem('access_token')
           }
         })
-        commit('setStorys', data.videos)
+        commit('setStories', data.teks)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
