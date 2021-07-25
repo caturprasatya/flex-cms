@@ -57,7 +57,10 @@
                   :preview="true"
                   :className="['fileinput', { 'fileinput--loaded': hasImage }]"
                   capture="environment"
+                  :quality="0.7"
                   :debug="1"
+                  :maxWidth="1280"
+                  :maxHeight="720"
                   doNotResize="gif"
                   :autoRotate="true"
                   outputFormat="verbose"
@@ -97,7 +100,7 @@
           class="grid grid-cols-1 space-y-2">
           <label class="text-sm font-bold text-gray-500 tracking-wide">Attach Files </label>
             <textarea
-            v-model="file.description"
+            v-model="video_url"
             class="text-base p-2 bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
             placeholder="Copy Your Url" />
         </div>
@@ -166,11 +169,7 @@ export default {
     setImage: function (output) {
       this.hasImage = true
       this.image = output
-      console.log(output)
-    },
-    previewFilesVideo (event) {
-      this.video = event.target.files[0]
-      this.videoUrl = URL.createObjectURL(event.target.files[0])
+      console.log(output.info)
     },
     clearFile () {
       this.file = {
@@ -194,7 +193,7 @@ export default {
         return
       }
       if (this.type === 'editPage' && !this.image && this.file.type === 'video') {
-        this.clearFile()
+        // this.clearFile()
         return
       }
       const uploadTask = storage.ref(`popularWork/${this.image.info?.name}`).putString(this.image.dataUrl.split(',')[1], 'base64', { contentType: 'image/png' })
@@ -216,25 +215,34 @@ export default {
               this.file.url = downloadUrl
               if (this.file.type === 'photo') {
                 this.$store.dispatch('addPopularWork', { ...this.file })
+                this.clearFile()
               }
               if (this.file.type === 'photo' && this.type === 'editPage') {
                 this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
+                this.clearFile()
               }
-              this.clearFile()
+              this.onUploadVideo()
             })
         }
       )
     },
     async onUploadVideo () {
-      if (this.type === 'editPage' && this.isEditVideo) {
-        this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
+      if (this.type === 'editPage' && this.video_url !== this.isEditVideo) {
+        this.$store.dispatch('editPopularWork', {
+          ...this.file,
+          id: this.$route.params?.id,
+          video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&controls=0&autoplay=1&loop=1&rel=0'
+        })
         return
       }
       if (this.type === 'ediPage') {
         this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
+        return
       }
-      this.$store.dispatch('addPopularWork', { ...this.file, video_url: this.video_url + 'theme=black&color=red&showinfo=1&modestbranding=1&controls=0&autoplay=1&loop=1&rel=0' })
-
+      if (this.file.url.length) {
+        this.$store.dispatch('addPopularWork', { ...this.file, video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&controls=0&autoplay=1&loop=1&rel=0' })
+      }
+      this.clearFile()
       // const uploadTask = storage.ref(`popularWork/${this.video.name}`).put(this.video)
       // uploadTask.on(
       //   'state_changed',
@@ -277,19 +285,12 @@ export default {
       }
     },
     async uploadData () {
-      if (this.file.type === 'photo') {
-        this.onUploadImage()
-      } else {
-        this.onUploadImage(); this.onUploadVideo()
-      }
+      this.onUploadImage()
     },
     onEditPage () {
       this.file = this.$store.state.detailPopularWork
-      console.log(this.type, this.image, this.type && !this.image && this.file.type === 'video')
-      console.log(this.file)
-      // this.setImage({ dataUrl: this.file.url, info: 'testing.png' })
       if (this.file.type === 'video') {
-        this.isEditVideo = true
+        this.isEditVideo = this.file.video_url
         this.video = true
         this.video_url = this.file.video_url
       }

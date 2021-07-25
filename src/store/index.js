@@ -11,6 +11,11 @@ export default new Vuex.Store({
     popularWorks: [],
     heroSections: [],
     categories: [],
+    stories: [],
+    contacts: [],
+    detailStory: {},
+    detailContact: {},
+    detailCategory: {},
     detailPopularWork: {},
     detailHeroSection: {},
     isLoadingDetailPW: false,
@@ -311,6 +316,192 @@ export default new Vuex.Store({
         })
         dispatch('fetchCategories')
         router.push('/')
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    // !================== Contact ================================
+    async fetchContacts ({ commit, dispatch }) {
+      try {
+        const { data } = await axios({
+          method: 'GET',
+          url: '/contact',
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        commit('setContacts', data.videos)
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async addContact ({ dispatch }, payload) {
+      try {
+        await axios({
+          method: 'POST',
+          url: '/contact',
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          },
+          data: payload
+        })
+        dispatch('fetchContacts')
+        // Vue.swal({
+        //   title: 'Product Added',
+        //   showClass: {
+        //     popup: 'animate__animated animate__fadeInDown'
+        //   },
+        //   hideClass: {
+        //     popup: 'animate__animated animate__fadeOutUp'
+        //   }
+        // })
+        router.push('/contact')
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async editContact ({ dispatch }, payload) {
+      const { id } = payload
+      try {
+        await axios({
+          method: 'PUT',
+          url: `/contact/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          },
+          data: payload
+        })
+        dispatch('fetchContacts')
+        router.push('/contact')
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async getContactById ({ commit, dispatch }, { id, isEdit }) {
+      try {
+        const { data } = await axios({
+          method: 'GET',
+          url: `/contact/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        commit('setDetailContact', data)
+        if (!isEdit) {
+          router.push(`/ContactEdit/${id}`)
+        }
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async deleteContactById ({ dispatch }, id) {
+      try {
+        await axios({
+          method: 'DELETE',
+          url: `/contact/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        dispatch('fetchContacts')
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    // !===================== Story ================================
+    async fetchStories ({ commit, dispatch }) {
+      try {
+        const { data } = await axios({
+          method: 'GET',
+          url: '/story',
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        commit('setStorys', data.videos)
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async addStory ({ dispatch }, payload) {
+      try {
+        await axios({
+          method: 'POST',
+          url: '/story',
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          },
+          data: payload
+        })
+        dispatch('fetchStories')
+        // Vue.swal({
+        //   title: 'Product Added',
+        //   showClass: {
+        //     popup: 'animate__animated animate__fadeInDown'
+        //   },
+        //   hideClass: {
+        //     popup: 'animate__animated animate__fadeOutUp'
+        //   }
+        // })
+        router.push('/story')
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async editStory ({ dispatch }, payload) {
+      const { id } = payload
+      try {
+        await axios({
+          method: 'PUT',
+          url: `/story/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          },
+          data: payload
+        })
+        dispatch('fetchStories')
+        router.push('/story')
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async getStoryById ({ commit, dispatch }, { id, isEdit }) {
+      try {
+        const { data } = await axios({
+          method: 'GET',
+          url: `/story/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        commit('setDetailStory', data)
+        if (!isEdit) {
+          router.push(`/StoryEdit/${id}`)
+        }
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async deleteStoryById ({ dispatch }, id) {
+      try {
+        await axios({
+          method: 'DELETE',
+          url: `/story/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        dispatch('fetchStories')
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }

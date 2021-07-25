@@ -50,6 +50,8 @@ export default {
     this.$store.dispatch('fetchPopularWorks')
     this.$store.dispatch('fetchHeroSections')
     this.$store.dispatch('fetchCategories')
+    this.$store.dispatch('fetchContacts')
+    this.$store.dispatch('fetchStories')
   }
 }
 </script>

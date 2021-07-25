@@ -1,5 +1,6 @@
 <template>
-  <div class="antialiased sans-serif bg-transparent h-screen">
+<div></div>
+  <!-- <div class="antialiased sans-serif bg-transparent h-screen">
     <div class="container mx-auto py-6 px-4" x-cloak>
       <h1 class="text-3xl font-mono font-semibold text-green-50 py-4 border-b mb-10">Datatable</h1>
         <div v-if="selectedRows.length" class="bg-teal-200 fixed top-0 left-0 right-0 z-40 w-full shadow">
@@ -104,82 +105,82 @@
         </table>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 export default {
-  name: 'TableClent',
-  data () {
-    return {
-      headings: [
-        {
-          key: 'userId',
-          value: 'User ID'
-        },
-        {
-          key: 'name',
-          value: 'Name'
-        },
-        {
-          key: 'emailAddress',
-          value: 'Email'
-        },
-        {
-          key: 'phoneNumber',
-          value: 'Phone'
-        }
-      ],
-      selectedRows: []
-    }
-  },
-  created () {
-  },
-  methods: {
-    toggleColumn (key) {
-      // Note: All td must have the same class name as the headings key!
-      const columns = document.querySelectorAll('.' + key)
-      if (this.$refs[key].classList.contains('hidden') && this.$refs[key].classList.contains(key)) {
-        columns.forEach(column => {
-          column.classList.remove('hidden')
-        })
-      } else {
-        columns.forEach(column => {
-          column.classList.add('hidden')
-        })
-      }
-    },
-    getRowDetail ($event, id) {
-      const rows = this.selectedRows
+  // name: 'TableClent',
+  // data () {
+  //   return {
+  //     headings: [
+  //       {
+  //         key: 'userId',
+  //         value: 'User ID'
+  //       },
+  //       {
+  //         key: 'name',
+  //         value: 'Name'
+  //       },
+  //       {
+  //         key: 'emailAddress',
+  //         value: 'Email'
+  //       },
+  //       {
+  //         key: 'phoneNumber',
+  //         value: 'Phone'
+  //       }
+  //     ],
+  //     selectedRows: []
+  //   }
+  // },
+  // created () {
+  // },
+  // methods: {
+  //   toggleColumn (key) {
+  //     // Note: All td must have the same class name as the headings key!
+  //     const columns = document.querySelectorAll('.' + key)
+  //     if (this.$refs[key].classList.contains('hidden') && this.$refs[key].classList.contains(key)) {
+  //       columns.forEach(column => {
+  //         column.classList.remove('hidden')
+  //       })
+  //     } else {
+  //       columns.forEach(column => {
+  //         column.classList.add('hidden')
+  //       })
+  //     }
+  //   },
+  //   getRowDetail ($event, id) {
+  //     const rows = this.selectedRows
 
-      if (rows.includes(id)) {
-        const index = rows.indexOf(id)
-        rows.splice(index, 1)
-      } else {
-        rows.push(id)
-      }
-    },
-    selectAllCheckbox ($event) {
-      const columns = document.querySelectorAll('.rowCheckbox')
+  //     if (rows.includes(id)) {
+  //       const index = rows.indexOf(id)
+  //       rows.splice(index, 1)
+  //     } else {
+  //       rows.push(id)
+  //     }
+  //   },
+  //   selectAllCheckbox ($event) {
+  //     const columns = document.querySelectorAll('.rowCheckbox')
 
-      this.selectedRows = []
+  //     this.selectedRows = []
 
-      if ($event.target.checked === true) {
-        columns.forEach(column => {
-          column.checked = true
-          this.selectedRows.push(parseInt(column.name))
-        })
-      } else {
-        columns.forEach(column => {
-          column.checked = false
-        })
-        this.selectedRows = []
-      }
-    }
-  },
-  computed: {
-    ...mapState(['clients'])
-  }
+  //     if ($event.target.checked === true) {
+  //       columns.forEach(column => {
+  //         column.checked = true
+  //         this.selectedRows.push(parseInt(column.name))
+  //       })
+  //     } else {
+  //       columns.forEach(column => {
+  //         column.checked = false
+  //       })
+  //       this.selectedRows = []
+  //     }
+  //   }
+  // },
+  // computed: {
+  //   ...mapState(['clients'])
+  // }
 }
 </script>
