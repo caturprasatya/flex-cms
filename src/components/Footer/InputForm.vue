@@ -28,7 +28,7 @@
               <input
               class="text-base p-2 border bg-gray-200 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
               type="url"
-              v-model="file.role"
+              v-model="file.url"
               placeholder="Role">
           </div>
           <div>
@@ -53,23 +53,27 @@ export default {
       type: this.$route.params?.id ? 'editPage' : 'addPage',
       file: {
         name: '',
-        role: '',
-        phone_number: '',
-        email: ''
+        url: ''
       }
     }
   },
   methods: {
     onUpload () {
       if (this.type === 'editPage') {
-        this.$store.dispatch('editContact', { ...this.file, id: this.$route.params?.id })
+        this.$store.dispatch('editFooter', { ...this.file, id: this.$route.params?.id })
         return
       }
-      this.$store.dispatch('addContact', this.file)
+      this.$store.dispatch('addFooter', this.file)
     },
     detailData () {
-      // ...mapState([])
-      this.file = this.$store.state.detailContact
+      if (this.type === 'editPage') {
+        this.file = this.$store.state.detailFooter
+      } else {
+        this.file = {
+          name: '',
+          url: '',
+        }
+      }
     },
     uploadData () {
       this.onUpload()

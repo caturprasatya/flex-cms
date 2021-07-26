@@ -28,24 +28,8 @@
               <input
               class="text-base p-2 border bg-gray-200 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
               type="text"
-              v-model="file.role"
+              v-model="file.isActive"
               placeholder="Role">
-          </div>
-          <div class="grid grid-cols-1 space-y-2">
-            <label class="text-sm font-bold text-gray-500 tracking-wide">Phone Number</label>
-              <input
-              class="text-base p-2 border bg-gray-200 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
-              type="number"
-              v-model="file.phone_number"
-              placeholder="Phone Number">
-          </div>
-          <div class="grid grid-cols-1 space-y-2">
-            <label class="text-sm font-bold text-gray-500 tracking-wide">Email</label>
-              <input
-              class="text-base p-2 border bg-gray-200 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
-              type="email"
-              v-model="file.email"
-              placeholder="Email">
           </div>
           <div>
             <button type="submit" class="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
@@ -54,12 +38,6 @@
               >
               Upload
           </button>
-          <!-- <button type="submit" class="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
-              font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
-              @click.prevent="editData"
-              >
-              Edit Work
-          </button> -->
           </div>
       </form>
     </div>
@@ -75,23 +53,29 @@ export default {
       type: this.$route.params?.id ? 'editPage' : 'addPage',
       file: {
         name: '',
-        role: '',
-        phone_number: '',
-        email: ''
+        CategoryId: '',
+        isActive: null
       }
     }
   },
   methods: {
     onUpload () {
       if (this.type === 'editPage') {
-        this.$store.dispatch('editContact', { ...this.file, id: this.$route.params?.id })
+        this.$store.dispatch('editNavbar', { ...this.file, id: this.$route.params?.id })
         return
       }
-      this.$store.dispatch('addContact', this.file)
+      this.$store.dispatch('addNavbar', this.file)
     },
     detailData () {
-      // ...mapState([])
-      this.file = this.$store.state.detailContact
+      if (this.type === 'editPage') {
+        this.file = this.$store.state.detailNavbar
+      } else {
+        this.file = {
+        name: '',
+        CategoryId: '',
+        isActive: null
+      }
+      }
     },
     uploadData () {
       this.onUpload()
