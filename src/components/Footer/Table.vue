@@ -8,13 +8,11 @@
                     <tr class="bg-gray-900 text-gray-100 uppercase text-sm leading-normal">
                       <th class="py-3 px-6 text-left">No</th>
                       <th class="py-3 px-6 text-left">Name</th>
-                      <th class="py-3 px-6 text-left">Role</th>
-                      <th class="py-3 px-6 text-center">Phone Number</th>
-                      <th class="py-3 px-6 text-center">Email</th>
+                      <th class="py-3 px-6 text-left">Account</th>
                       <th class="py-3 px-6 text-center">Action</th>
                     </tr>
                   </thead>
-                  <tbody v-for="(item, index) in contacts" :key="index" class="text-gray-100 text-sm font-light">
+                  <tbody v-for="(item, index) in footers" :key="index" class="text-gray-100 text-sm font-light">
                       <tr class="border-b border-gray-200 hover:bg-gray-400">
                         <td class="py-3 px-6 text-left w-2 whitespace-wrap">
                           <div class="flex items-center w-2">
@@ -29,19 +27,9 @@
                         <td class="py-3 px-6 text-left">
                           <div class="flex items-center">
                             <div class="flex items-center">
-                              <span class="font-medium truncate">{{ item.role }}</span>
+                              <span class="font-medium truncate">{{ item.url }}</span>
                             </div>
                           </div>
-                        </td>
-                        <td class="py-3 px-6 text-left whitespace-wrap">
-                            <div class="flex items-center ">
-                                <span class="font-medium truncate">{{ item.phone_number }}</span>
-                            </div>
-                        </td>
-                        <td class="py-3 px-6 text-left whitespace-wrap">
-                            <div class="flex items-center">
-                                <span class="font-medium truncate">{{ item.email }}</span>
-                            </div>
                         </td>
                         <td class="py-3 px-6 text-center">
                             <div class="flex item-center justify-center">
@@ -78,7 +66,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['contacts'])
+    ...mapState(['footers'])
   },
   methods: {
     deleteProduct (id) {
@@ -92,12 +80,12 @@ export default {
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
         if (result.isConfirmed) {
-          this.$store.dispatch('deleteContactById', id)
+          this.$store.dispatch('deleteFooterById', id)
         }
       })
     },
     populateProduct (id) {
-      this.$store.dispatch('getContactById', { id, isEdit: false })
+      this.$store.dispatch('getFooterById', { id, isEdit: false })
     }
   },
   components: {
