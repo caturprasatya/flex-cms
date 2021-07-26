@@ -17,27 +17,23 @@
                       <tr class="border-b border-gray-200 hover:bg-gray-400">
                         <td class="py-3 px-6 text-left w-40 whitespace-wrap">
                           <div class="flex items-center w-40">
-                            <div class="mr-2">
-                            </div>
                             <span class="font-medium truncate">{{ item.name }}</span>
                           </div>
                         </td>
                         <td class="py-3 px-6 text-left">
                           <div class="flex items-center">
-                            <div class="flex items-center w-40">
-                              <div class="mr-2">
-                              </div>
+                            <div class="flex items-center">
                               <span class="font-medium truncate">{{ item.role }}</span>
                             </div>
                           </div>
                         </td>
-                        <td class="py-3 px-6 text-left w-40 whitespace-wrap">
-                            <div class="flex items-center w-40">
+                        <td class="py-3 px-6 text-left whitespace-wrap">
+                            <div class="flex items-center ">
                                 <span class="font-medium truncate">{{ item.phone_number }}</span>
                             </div>
                         </td>
-                        <td class="py-3 px-6 text-left w-40 whitespace-wrap">
-                            <div class="flex items-center w-40">
+                        <td class="py-3 px-6 text-left whitespace-wrap">
+                            <div class="flex items-center">
                                 <span class="font-medium truncate">{{ item.email }}</span>
                             </div>
                         </td>

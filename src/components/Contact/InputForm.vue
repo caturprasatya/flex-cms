@@ -20,7 +20,7 @@
               <input
               class="text-base p-2 border bg-gray-200 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
               type="text"
-              v-model="file.title"
+              v-model="file.name"
               placeholder="Name">
           </div>
           <div class="grid grid-cols-1 space-y-2">
@@ -28,7 +28,7 @@
               <input
               class="text-base p-2 border bg-gray-200 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
               type="text"
-              v-model="file.title"
+              v-model="file.role"
               placeholder="Role">
           </div>
           <div class="grid grid-cols-1 space-y-2">
@@ -36,7 +36,7 @@
               <input
               class="text-base p-2 border bg-gray-200 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
               type="number"
-              v-model="file.title"
+              v-model="file.phone_number"
               placeholder="Phone Number">
           </div>
           <div class="grid grid-cols-1 space-y-2">
@@ -44,7 +44,7 @@
               <input
               class="text-base p-2 border bg-gray-200 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
               type="email"
-              v-model="file.title"
+              v-model="file.email"
               placeholder="Email">
           </div>
           <div>
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     onUpload () {
-      if (this.type === 'editPage' && !this.video) {
+      if (this.type === 'editPage') {
         this.$store.dispatch('editContact', { ...this.file, id: this.$route.params?.id })
         return
       }

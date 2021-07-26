@@ -43,6 +43,9 @@ export default new Vuex.Store({
     setContact (state, payload) {
       state.detailContact = payload
     },
+    setDetailContact (state, payload) {
+      state.detailContact = payload
+    },
     setStories (state, payload) {
       state.stories = payload
     },
@@ -290,7 +293,7 @@ export default new Vuex.Store({
             access_token: localStorage.getItem('access_token')
           }
         })
-        // console.log(data)
+        console.log(data.categories)
         commit('setCategories', data.categories)
       } catch ({ response }) {
         dispatch('errorsHandler', response)

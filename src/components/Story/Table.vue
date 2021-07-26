@@ -14,8 +14,6 @@
                       <tr class="border-b border-gray-200 hover:bg-gray-400">
                           <td class="py-3 px-6 text-center max-w-xs h-12 whitespace-wrap">
                               <div class="flex justify-center items-center max-w-xs">
-                                  <!-- <div class="mr-2">
-                                  </div> -->
                                   <span class="font-medium">{{ item.teks }}</span>
                               </div>
                           </td>

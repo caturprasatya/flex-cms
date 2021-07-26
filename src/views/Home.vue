@@ -46,7 +46,7 @@ export default {
   computed: {
     ...mapState(['sideBarOpen'])
   },
-  created () {
+  mounted () {
     this.$store.dispatch('fetchPopularWorks')
     this.$store.dispatch('fetchHeroSections')
     this.$store.dispatch('fetchCategories')
