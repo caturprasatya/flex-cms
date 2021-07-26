@@ -288,11 +288,15 @@ export default {
       this.onUploadImage()
     },
     onEditPage () {
-      this.file = this.$store.state.detailPopularWork
-      if (this.file.type === 'video') {
-        this.isEditVideo = this.file.video_url
-        this.video = true
-        this.video_url = this.file.video_url
+      if (this.type === 'editPage') {
+        this.file = this.$store.state.detailPopularWork
+        if (this.file.type === 'video') {
+          this.isEditVideo = this.file.video_url
+          this.video = true
+          this.video_url = this.file.video_url
+        }
+      } else {
+        this.clearFile()
       }
     }
   },

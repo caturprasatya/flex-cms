@@ -74,15 +74,6 @@ export default {
     },
     populateProduct (id) {
       this.$store.dispatch('getStoryById', { id, isEdit: false })
-    },
-    async showModal (payload) {
-      // await this.$$store.commit('setLoadingDetail', true)
-      await this.$store.commit('setDetailStory', payload)
-      // await this.$$store.commit('setLoadingDetail', false)
-      this.useModalToBanner = true
-    },
-    hideModalBanner () {
-      this.useModalToBanner = false
     }
   },
   components: {

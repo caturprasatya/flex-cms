@@ -1,11 +1,13 @@
 <template>
   <div class="w-full bg-gray-700 m-0 flex flex-col">
     <div class="active content lg:w-6/12 md:w-6/12">
-      <h1>Sign in</h1>
+    <div class="flex justify-center">
+        <img src="../assets/image/flex.png" class=" w-3/4 my-1 justify-self-center" alt="" />
+    </div>
       <div class="input-field">
         <input placeholder="Email" type="email" v-model="user.email" class="validate"></div>
       <div class="input-field">
-        <input placeholder="Password" type="password" v-model="user.password" class="validate"></div>
+        <input placeholder="Password" v-on:keyup.enter="submitUserLogin" type="password" v-model="user.password" class="validate"></div>
         <button class="second-button" @click.prevent="submitUserLogin">Sign in</button>
         <!-- <p>Forgot password? <a href="/signup.html">Send Email</a></p> -->
     </div>
@@ -127,7 +129,7 @@ a {
   outline: none;
 }
 
-.second-button:active{
+.second-button:hover{
   background: linear-gradient(145deg,#222222, #292929);
   box-shadow: 5px 5px 10px #262626, -5px -5px 10px #262626;
   border: none;

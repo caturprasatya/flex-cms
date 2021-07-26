@@ -13,7 +13,11 @@ export default new Vuex.Store({
     categories: [],
     stories: [],
     contacts: [],
+    footers: [],
+    navbars: [],
     detailStory: {},
+    detailFooter: {},
+    detailNavbar: {},
     detailContact: {},
     detailCategory: {},
     detailPopularWork: {},
@@ -52,11 +56,26 @@ export default new Vuex.Store({
     setStory (state, payload) {
       state.detailStory = payload
     },
-    setLoadingDetail (state, boolean) {
-      state.isLoadingDetailPW = boolean
+    setDetailCategory (state, payload) {
+      state.detailCategory = payload
     },
     setCategories (state, payload) {
       state.categories = payload
+    },
+    setNavbars (state, payload) {
+      state.navbars = payload
+    },
+    setNavbar (state, payload) {
+      state.detailNavbar = payload
+    },
+    setFooters (state, payload) {
+      state.footers = payload
+    },
+    setFooter (state, payload) {
+      state.detailFooter = payload
+    },
+    setLoadingDetail (state, boolean) {
+      state.isLoadingDetailPW = boolean
     },
     toggleSidebar (state) {
       state.sideBarOpen = !state.sideBarOpen
@@ -293,13 +312,12 @@ export default new Vuex.Store({
             access_token: localStorage.getItem('access_token')
           }
         })
-        console.log(data.categories)
         commit('setCategories', data.categories)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async deleteCategory ({ dispatch }, { id }) {
+    async deleteCategoryById ({ dispatch }, id) {
       try {
         await axios({
           method: 'DELETE',
@@ -308,13 +326,13 @@ export default new Vuex.Store({
             access_token: localStorage.getItem('access_token')
           }
         })
-        dispatch('fetchCategories')
-        router.push('/')
         Swal.fire(
           'Deleted!',
           'Your file has been deleted.',
           'success'
         )
+        dispatch('fetchCategories')
+        // router.push('/category')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
@@ -330,7 +348,42 @@ export default new Vuex.Store({
           }
         })
         dispatch('fetchCategories')
-        router.push('/')
+        router.push('/category')
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async getCategoryById ({ commit, dispatch }, { id, isEdit }) {
+      try {
+        const { data } = await axios({
+          method: 'GET',
+          url: `/category/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        commit('setDetailCategory', data)
+        if (!isEdit) {
+          router.push(`/CategoryEdit/${id}`)
+        }
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+
+    async editCategory ({ dispatch }, payload) {
+      const { id } = payload
+      try {
+        await axios({
+          method: 'PUT',
+          url: `/banner/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          },
+          data: payload
+        })
+        dispatch('fetchCategories')
+        router.push('/banner')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
@@ -495,7 +548,7 @@ export default new Vuex.Store({
             access_token: localStorage.getItem('access_token')
           }
         })
-        commit('setDetailStory', data)
+        commit('setStory', data)
         if (!isEdit) {
           router.push(`/StoryEdit/${id}`)
         }
@@ -513,6 +566,193 @@ export default new Vuex.Store({
           }
         })
         dispatch('fetchStories')
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    // !===================== Navbar ================================
+    async fetchNavbars ({ commit, dispatch }) {
+      try {
+        const { data } = await axios({
+          method: 'GET',
+          url: '/navbar',
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        commit('setNavbars', data.navbars)
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async addNavbar ({ dispatch }, payload) {
+      try {
+        await axios({
+          method: 'POST',
+          url: '/navbar',
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          },
+          data: payload
+        })
+        dispatch('fetchNavbars')
+        // Vue.swal({
+        //   title: 'Product Added',
+        //   showClass: {
+        //     popup: 'animate__animated animate__fadeInDown'
+        //   },
+        //   hideClass: {
+        //     popup: 'animate__animated animate__fadeOutUp'
+        //   }
+        // })
+        router.push('/Navbar')
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async editNavbar ({ dispatch }, payload) {
+      const { id } = payload
+      try {
+        await axios({
+          method: 'PUT',
+          url: `/Navbar/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          },
+          data: payload
+        })
+        dispatch('fetchNavbars')
+        router.push('/Navbar')
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async getNavbarById ({ commit, dispatch }, { id, isEdit }) {
+      try {
+        const { data } = await axios({
+          method: 'GET',
+          url: `/navbar/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        commit('setNavbar', data)
+        if (!isEdit) {
+          router.push(`/NavbarEdit/${id}`)
+        }
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async deleteNavbarById ({ dispatch }, id) {
+      try {
+        await axios({
+          method: 'DELETE',
+          url: `/navbar/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        dispatch('fetchNavbars')
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    // !===================== Footer ================================
+    async fetchFooters ({ commit, dispatch }) {
+      try {
+        const { data } = await axios({
+          method: 'GET',
+          url: '/footer',
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        console.log(data.teks)
+        commit('setFooters', data.teks)
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async addFooter ({ dispatch }, payload) {
+      try {
+        await axios({
+          method: 'POST',
+          url: '/footer',
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          },
+          data: payload
+        })
+        dispatch('fetchFooters')
+        // Vue.swal({
+        //   title: 'Product Added',
+        //   showClass: {
+        //     popup: 'animate__animated animate__fadeInDown'
+        //   },
+        //   hideClass: {
+        //     popup: 'animate__animated animate__fadeOutUp'
+        //   }
+        // })
+        router.push('/Footer')
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async editFooter ({ dispatch }, payload) {
+      const { id } = payload
+      try {
+        await axios({
+          method: 'PUT',
+          url: `/footer/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          },
+          data: payload
+        })
+        dispatch('fetchFooters')
+        router.push('/footer')
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async getFooterById ({ commit, dispatch }, { id, isEdit }) {
+      try {
+        const { data } = await axios({
+          method: 'GET',
+          url: `/footer/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        commit('setFooter', data)
+        if (!isEdit) {
+          router.push(`/FooterEdit/${id}`)
+        }
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
+    async deleteFooterById ({ dispatch }, id) {
+      try {
+        await axios({
+          method: 'DELETE',
+          url: `/footer/${id}`,
+          headers: {
+            access_token: localStorage.getItem('access_token')
+          }
+        })
+        dispatch('fetchFooters')
         Swal.fire(
           'Deleted!',
           'Your file has been deleted.',

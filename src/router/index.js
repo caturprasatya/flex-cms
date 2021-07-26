@@ -56,6 +56,16 @@ const routes = [
         component: () => import('../views/main/Contact/Contact.vue')
       },
       {
+        path: '/navbar',
+        name: 'Story',
+        component: () => import('../views/main/Story/Story.vue')
+      },
+      {
+        path: '/footer',
+        name: 'Contact',
+        component: () => import('../views/main/Footer/Footer.vue')
+      },
+      {
         path: '/inputCategory',
         name: 'Input Category',
         component: () => import('../views/main/Category/InputCategory.vue')

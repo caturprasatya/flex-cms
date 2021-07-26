@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Form from '@/components/Category/FormInputCategory.vue'
+import Form from '@/components/Footer/InputForm.vue'
 
 export default {
   components: {

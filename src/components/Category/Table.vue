@@ -6,12 +6,18 @@
               <table class="min-w-max w-full table-auto">
                   <thead>
                     <tr class="bg-gray-900 text-gray-100 uppercase text-sm leading-normal">
-                      <th class="py-3 px-6 text-left">Story</th>
+                      <th class="py-3 px-6 text-center">No</th>
+                      <th class="py-3 px-3 text-center">Category</th>
                       <th class="py-3 px-6 text-center">Actions</th>
                     </tr>
                   </thead>
                   <tbody v-for="(item, index) in categories" :key="index" class="text-gray-100 text-sm font-light">
                       <tr class="border-b border-gray-200 hover:bg-gray-400">
+                          <td class="py-3 px-6 text-center w-2 whitespace-wrap">
+                              <div class="flex justify-center items-center w-2">
+                                  <span class="font-medium">{{ index + 1 }}</span>
+                              </div>
+                          </td>
                           <td class="py-3 px-6 text-center max-w-xs h-12 whitespace-wrap">
                               <div class="flex justify-center items-center max-w-xs">
                                   <span class="font-medium">{{ item.name }}</span>
@@ -41,10 +47,7 @@
 
 <script>
 import Swal from 'sweetalert2'
-// import { AtomSpinner } from 'epic-spinners'
-
 import { mapState } from 'vuex'
-// import CardModal from '@/components/Story/ui/CardModalBanner.vue'
 
 export default {
   name: 'Table',
@@ -68,21 +71,12 @@ export default {
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
         if (result.isConfirmed) {
-          this.$store.dispatch('deleteStoryById', id)
+          this.$store.dispatch('deleteCategoryById', id)
         }
       })
     },
     populateProduct (id) {
-      this.$store.dispatch('getStoryById', { id, isEdit: false })
-    },
-    async showModal (payload) {
-      // await this.$$store.commit('setLoadingDetail', true)
-      await this.$store.commit('setDetailStory', payload)
-      // await this.$$store.commit('setLoadingDetail', false)
-      this.useModalToBanner = true
-    },
-    hideModalBanner () {
-      this.useModalToBanner = false
+      this.$store.dispatch('getCategoryById', { id, isEdit: false })
     }
   },
   components: {

@@ -126,11 +126,13 @@ export default {
       )
     },
     detailData () {
-      // ...mapState([])
-      this.file = this.$store.state.detailHeroSection
-      this.video = true
-      this.videoUrl = this.$store.state.detailHeroSection.video_url
-      console.log('ini foile==========>', this.file)
+      if (this.type === 'editPage') {
+        this.file = this.$store.state.detailHeroSection
+        this.video = true
+        this.videoUrl = this.$store.state.detailHeroSection.video_url
+      } else {
+        this.clearData()
+      }
     },
     deleteFileUpload () {
       if (this.file_data) {
@@ -152,6 +154,17 @@ export default {
     },
     editData () {
       this.onUpload()
+    },
+    clearData () {
+      this.file = {
+        title: '',
+        desc: '',
+        video_url: '',
+        image_url: 'https://images.unsplash.com/photo-1610008130029-5feca0b79a7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80'
+      }
+      this.progressBar = 0
+      this.video = null
+      this.videoUrl = null
     }
   },
   created () {
@@ -162,7 +175,6 @@ export default {
     // OrbitSpinner
   },
   mounted () {
-    console.log(this.detailHeroSection, '=====>>> state components')
     this.detailData()
   }
 }
