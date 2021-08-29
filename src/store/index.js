@@ -113,6 +113,7 @@ export default new Vuex.Store({
           url: '/login',
           data: payload
         })
+        console.log(data)
         localStorage.setItem('access_token', data.token)
         router.push('/')
       } catch ({ response }) {
