@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-screen flex justify-center py-3 px-4 sm:px-3 lg:px-6 items-center">
+  <div class="relative flex justify-center py-3 px-4 sm:px-3 lg:px-6">
     <!-- <OrbitSpinner
       v-if="this.$route.params?.id && file.url.length"
       :animation-duration="1200"

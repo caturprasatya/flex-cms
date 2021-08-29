@@ -215,25 +215,19 @@ export default {
     },
     async onUploadVideo () {
       const onChange = this.video_url.search('theme')
-      console.log(onChange)
       if (this.type === 'editPage' && this.video_url !== this.isEditVideo && onChange > 0) {
         this.$store.dispatch('editPopularWork', {
           ...this.file,
           id: this.$route.params?.id,
           video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&autoplay=1&loop=1&rel=0&controls=1'
         })
-        console.log('test in diference url')
         return
       }
       if (this.type === 'editPage') {
-        console.log(this.file)
-        console.log(this.type)
         this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
-        console.log('test in same url')
         return
       }
       if (this.video_url.length && this.type === 'addPage') {
-        console.log('test in add url')
         this.$store.dispatch('addPopularWork', { ...this.file, video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&controls=0&autoplay=1&loop=1&rel=0' })
       }
       this.clearFile()

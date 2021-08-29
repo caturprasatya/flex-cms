@@ -9,6 +9,7 @@
                       <th class="py-3 px-6 text-left">No</th>
                       <th class="py-3 px-6 text-left">Name</th>
                       <th class="py-3 px-6 text-left">Account</th>
+                      <th class="py-3 px-6 text-center">View</th>
                       <th class="py-3 px-6 text-center">Action</th>
                     </tr>
                   </thead>
@@ -28,6 +29,13 @@
                           <div class="flex items-center">
                             <div class="flex items-center">
                               <span class="font-medium truncate">{{ item.url }}</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                          <div class="flex justify-center">
+                            <div class="mr-2">
+                              <img class="rounded" width="40" height="40" :src="item.imageData"/>
                             </div>
                           </div>
                         </td>

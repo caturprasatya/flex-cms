@@ -23,4 +23,5 @@ pnpm-debug.log*
 *.sw?
 
 # files dummy 
-form-tailwind.html
+form-tailwind.html.local
+dist.zip.local

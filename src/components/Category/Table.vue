@@ -78,7 +78,6 @@ export default {
       })
     },
     populateProduct (id) {
-      console.log('=================>', id, '<=================')
       this.$store.dispatch('getCategoryById', { id, isEdit: false })
     }
   },

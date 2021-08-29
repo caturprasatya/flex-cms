@@ -107,7 +107,8 @@ export default {
       type: this.$route.params?.id ? 'editPage' : 'addPage',
       file: {
         name: '',
-        url: ''
+        url: '',
+        imageData: ''
       },
       hasImage: false,
       image: null,
@@ -119,11 +120,13 @@ export default {
       this.hasImage = true
       this.image = output
       this.sampleImage = output.dataUrl
-      console.log(output)
     },
     onUpload () {
       const isMailTo = this.file.url.search(':')
       const mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+      if (this.image) {
+        this.file.imageData = this.sampleImage
+      }
       if (this.file.url.match(mailformat) && !isMailTo) {
         this.file.url = 'mailto:' + this.file.url
       }

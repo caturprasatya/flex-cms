@@ -2,7 +2,7 @@
   <div class="w-full bg-gray-700 m-0 flex flex-col">
     <div class="active content lg:w-6/12 md:w-6/12">
     <div class="flex justify-center">
-        <img src="../assets/image/flex.png" class=" w-3/4 my-1 justify-self-center" alt="" />
+        <img src="../assets/image/flex.png" class=" w-3/4 my-1 justify-self-center pb-4" alt="" />
     </div>
       <div class="input-field">
         <input placeholder="Email" type="email" v-model="user.email" class="validate"></div>
@@ -30,7 +30,6 @@ export default {
   methods: {
     submitUserLogin () {
       this.$store.dispatch('userLogin', this.user)
-      console.log(this.user)
     },
     togglePopup () {
       this.isPopup = !this.isPopup
