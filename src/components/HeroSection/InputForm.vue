@@ -7,7 +7,13 @@
       color="#ff1d5e"
     /> -->
     <div class="absolute opacity-60 inset-0 z-0"/>
-      <div class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
+      <ProgressBar v-if="isUpload" :progress="progress"/>
+      <div v-if="!isUpload" class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
+        <router-link to="/banner" class="nav-link" aria-current="page">
+          <div class="flex justify-end">
+              <button class="absolute top-0 z-12 bg-blue-500 text-white p-2 rounded hover:bg-blue-800">Close</button>
+          </div>
+        </router-link>
         <div class="text-center">
           <h2 class="mt-5 text-3xl font-bold text-gray-900">
             File Upload!
@@ -70,6 +76,7 @@
 
 <script>
 import { storage } from '../../configs/firebase'
+import ProgressBar from './ui/ProgressBar.vue'
 
 export default {
   name: 'InputForm',
@@ -80,18 +87,18 @@ export default {
         title: '',
         desc: '',
         video_url: '',
-        image_url: 'https://images.unsplash.com/photo-1610008130029-5feca0b79a7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80'
+        imageData: 'https://images.unsplash.com/photo-1610008130029-5feca0b79a7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80'
       },
-      progressBar: 0,
+      progress: 0,
       video: null,
-      videoUrl: null
+      videoUrl: null,
+      isUpload: false
     }
   },
   methods: {
     previewFilesVideo (event) {
       this.video = event.target.files[0]
       this.videoUrl = URL.createObjectURL(event.target.files[0])
-      console.log(event.target.files, '========', this.video)
     },
     onUpload () {
       if (this.type === 'editPage' && !this.video) {
@@ -102,10 +109,14 @@ export default {
       uploadTask.on(
         'state_changed',
         snapshot => {
+          this.isUpload = true
           const progress = Math.round(
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           )
-          this.progresBar = progress
+          this.$store.commit('setProgressBar', progress)
+          if (this.progress === 100) {
+            this.isUpload = false
+          }
         },
         error => {
           console.error(error)
@@ -119,6 +130,7 @@ export default {
               this.file.video_url = downloadUrl
               if (this.$route.params?.id) {
                 this.$store.dispatch('editHeroSection', { ...this.file, id: this.$route.params?.id })
+                return
               }
               this.$store.dispatch('addHeroSection', this.file)
             })
@@ -160,9 +172,9 @@ export default {
         title: '',
         desc: '',
         video_url: '',
-        image_url: 'https://images.unsplash.com/photo-1610008130029-5feca0b79a7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80'
+        imageData: 'https://images.unsplash.com/photo-1610008130029-5feca0b79a7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80'
       }
-      this.progressBar = 0
+      this.progress = 0
       this.video = null
       this.videoUrl = null
     }
@@ -172,7 +184,7 @@ export default {
   computed: {
   },
   components: {
-    // OrbitSpinner
+    ProgressBar
   },
   mounted () {
     this.detailData()
@@ -188,4 +200,5 @@ export default {
   #fileInput {
     display: none;
   }
+  @import url("https://fonts.googleapis.com/css2?family=Lemonada&display=swap");
 </style>

@@ -19,9 +19,11 @@
                               </div>
                           </td>
                           <td class="py-3 px-6 text-center max-w-xs h-12 whitespace-wrap">
+                            <div class="flex justify-center">
                               <div class="flex justify-center items-center max-w-xs">
-                                  <span class="font-medium">{{ item.name }}</span>
+                                <span class="ml-4 font-medium truncate">{{ item.name }}</span>
                               </div>
+                            </div>
                           </td>
                           <td class="py-3 px-6 text-center">
                               <div class="flex item-center justify-center">
@@ -76,6 +78,7 @@ export default {
       })
     },
     populateProduct (id) {
+      console.log('=================>', id, '<=================')
       this.$store.dispatch('getCategoryById', { id, isEdit: false })
     }
   },

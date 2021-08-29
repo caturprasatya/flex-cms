@@ -2,6 +2,11 @@
     <div class="relative flex justify-center py-3">
     <!-- <div class="absolute opacity-60 inset-0 z-0 p-0"/> -->
       <div class="sm:max-w-lg w-full p-3 bg-gray-300 shadow rounded-xl z-10">
+        <router-link to="/story" class="nav-link" aria-current="page">
+          <div class="flex justify-end">
+              <button class="absolute top-0 z-12 bg-blue-500 text-white p-2 rounded hover:bg-blue-800">Close</button>
+          </div>
+        </router-link>
       <label for="other" class="text-sm font-bold text-gray-500 tracking-wide">
         <span>Story</span>
         <textarea type="text" id="name" v-on:keyup="keyMonitor" v-model="text"
@@ -42,7 +47,7 @@ export default {
         this.$store.dispatch('editStory', { teks: this.text, id: this.$route.params?.id })
         return
       }
-      this.$store.dispatch('addStory', this.text)
+      this.$store.dispatch('addStory', { text: this.text })
     },
     editPage () {
       if (this.type === 'editPage') {

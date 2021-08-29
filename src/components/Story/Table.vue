@@ -6,15 +6,15 @@
               <table class="min-w-max w-full table-auto">
                   <thead>
                     <tr class="bg-gray-900 text-gray-100 uppercase text-sm leading-normal">
-                      <th class="py-3 px-6 text-left">Story</th>
+                      <th class="py-3 px-6 text-center">Story</th>
                       <th class="py-3 px-6 text-center">Actions</th>
                     </tr>
                   </thead>
                   <tbody v-for="(item, index) in stories" :key="index" class="text-gray-100 text-sm font-light">
                       <tr class="border-b border-gray-200 hover:bg-gray-400">
-                          <td class="py-3 px-6 text-center max-w-xs h-12 whitespace-wrap">
-                              <div class="flex justify-center items-center max-w-xs">
-                                  <span class="font-medium">{{ item.teks }}</span>
+                          <td class="py-3 px-6 justify-self-center max-w-xs h-12">
+                              <div class="flex justify-center items-center whitespace-wrap">
+                                  <span class=" font-semibold text-base ">{{ item.teks }}</span>
                               </div>
                           </td>
                           <td class="py-3 px-6 text-center">

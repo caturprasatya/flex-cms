@@ -26,6 +26,7 @@ export default new Vuex.Store({
     search: '',
     sideBarOpen: false,
     isEditPage: false,
+    progress: 0,
     token: localStorage.getItem('access_token') || ''
   },
   mutations: {
@@ -74,6 +75,10 @@ export default new Vuex.Store({
     setFooter (state, payload) {
       state.detailFooter = payload
     },
+    setProgressBar (state, payload) {
+      console.log(payload)
+      state.progress = payload
+    },
     setLoadingDetail (state, boolean) {
       state.isLoadingDetailPW = boolean
     },
@@ -108,7 +113,7 @@ export default new Vuex.Store({
           url: '/login',
           data: payload
         })
-        localStorage.setItem('access_token', data.access_token)
+        localStorage.setItem('access_token', data.token)
         router.push('/')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
@@ -120,10 +125,9 @@ export default new Vuex.Store({
           method: 'GET',
           url: '/',
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
-        // console.log(data)
         commit('setPopularWorks', data.items)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
@@ -135,7 +139,7 @@ export default new Vuex.Store({
           method: 'POST',
           url: '/',
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           },
           data: payload
         })
@@ -161,7 +165,7 @@ export default new Vuex.Store({
           method: 'PUT',
           url: `/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           },
           data: payload
         })
@@ -177,7 +181,7 @@ export default new Vuex.Store({
           method: 'GET',
           url: `/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         // commit('editPage', data)
@@ -195,7 +199,7 @@ export default new Vuex.Store({
           method: 'DELETE',
           url: `/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         dispatch('fetchPopularWorks')
@@ -216,7 +220,7 @@ export default new Vuex.Store({
           method: 'GET',
           url: '/banner',
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         commit('setHeroSections', data.videos)
@@ -230,7 +234,7 @@ export default new Vuex.Store({
           method: 'POST',
           url: '/banner',
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           },
           data: payload
         })
@@ -256,7 +260,7 @@ export default new Vuex.Store({
           method: 'PUT',
           url: `/banner/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           },
           data: payload
         })
@@ -272,7 +276,7 @@ export default new Vuex.Store({
           method: 'GET',
           url: `/banner/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         commit('setDetailHeroSection', data)
@@ -289,7 +293,7 @@ export default new Vuex.Store({
           method: 'DELETE',
           url: `/banner/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         dispatch('fetchHeroSections')
@@ -309,7 +313,7 @@ export default new Vuex.Store({
           method: 'GET',
           url: '/category',
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         commit('setCategories', data.categories)
@@ -323,7 +327,7 @@ export default new Vuex.Store({
           method: 'DELETE',
           url: `/category/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         Swal.fire(
@@ -344,7 +348,7 @@ export default new Vuex.Store({
           url: '/category',
           data: payload,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         dispatch('fetchCategories')
@@ -357,12 +361,12 @@ export default new Vuex.Store({
       try {
         const { data } = await axios({
           method: 'GET',
-          url: `/category/${id}`,
+          url: `/category/by/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
-        commit('setDetailCategory', data)
+        commit('setDetailCategory', data.category)
         if (!isEdit) {
           router.push(`/CategoryEdit/${id}`)
         }
@@ -370,20 +374,19 @@ export default new Vuex.Store({
         dispatch('errorsHandler', response)
       }
     },
-
     async editCategory ({ dispatch }, payload) {
       const { id } = payload
       try {
         await axios({
           method: 'PUT',
-          url: `/banner/${id}`,
+          url: `/category/${id}`,
+          data: { name: payload.name },
           headers: {
-            access_token: localStorage.getItem('access_token')
-          },
-          data: payload
+            'X-Access-Token': localStorage.getItem('access_token')
+          }
         })
-        dispatch('fetchCategories')
-        router.push('/banner')
+        await dispatch('fetchCategories')
+        router.push('/category')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
@@ -395,7 +398,7 @@ export default new Vuex.Store({
           method: 'GET',
           url: '/contact',
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         commit('setContacts', data.users)
@@ -409,7 +412,7 @@ export default new Vuex.Store({
           method: 'POST',
           url: '/contact',
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           },
           data: payload
         })
@@ -435,7 +438,7 @@ export default new Vuex.Store({
           method: 'PUT',
           url: `/contact/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           },
           data: payload
         })
@@ -451,7 +454,7 @@ export default new Vuex.Store({
           method: 'GET',
           url: `/contact/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         commit('setDetailContact', data)
@@ -468,7 +471,7 @@ export default new Vuex.Store({
           method: 'DELETE',
           url: `/contact/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         dispatch('fetchContacts')
@@ -488,10 +491,9 @@ export default new Vuex.Store({
           method: 'GET',
           url: '/story',
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
-        console.log(data.teks)
         commit('setStories', data.teks)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
@@ -503,7 +505,7 @@ export default new Vuex.Store({
           method: 'POST',
           url: '/story',
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           },
           data: payload
         })
@@ -529,7 +531,7 @@ export default new Vuex.Store({
           method: 'PUT',
           url: `/story/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           },
           data: payload
         })
@@ -545,7 +547,7 @@ export default new Vuex.Store({
           method: 'GET',
           url: `/story/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         commit('setStory', data)
@@ -562,7 +564,7 @@ export default new Vuex.Store({
           method: 'DELETE',
           url: `/story/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         dispatch('fetchStories')
@@ -582,7 +584,7 @@ export default new Vuex.Store({
           method: 'GET',
           url: '/navbar',
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         commit('setNavbars', data.navbars)
@@ -596,7 +598,7 @@ export default new Vuex.Store({
           method: 'POST',
           url: '/navbar',
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           },
           data: payload
         })
@@ -622,7 +624,7 @@ export default new Vuex.Store({
           method: 'PUT',
           url: `/Navbar/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           },
           data: payload
         })
@@ -638,7 +640,7 @@ export default new Vuex.Store({
           method: 'GET',
           url: `/navbar/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         commit('setNavbar', data)
@@ -655,7 +657,7 @@ export default new Vuex.Store({
           method: 'DELETE',
           url: `/navbar/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         dispatch('fetchNavbars')
@@ -675,11 +677,10 @@ export default new Vuex.Store({
           method: 'GET',
           url: '/footer',
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
-        console.log(data.teks)
-        commit('setFooters', data.teks)
+        commit('setFooters', data.socialMedia)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
@@ -690,7 +691,7 @@ export default new Vuex.Store({
           method: 'POST',
           url: '/footer',
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           },
           data: payload
         })
@@ -716,7 +717,7 @@ export default new Vuex.Store({
           method: 'PUT',
           url: `/footer/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           },
           data: payload
         })
@@ -732,7 +733,7 @@ export default new Vuex.Store({
           method: 'GET',
           url: `/footer/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         commit('setFooter', data)
@@ -749,7 +750,7 @@ export default new Vuex.Store({
           method: 'DELETE',
           url: `/footer/${id}`,
           headers: {
-            access_token: localStorage.getItem('access_token')
+            'X-Access-Token': localStorage.getItem('access_token')
           }
         })
         dispatch('fetchFooters')

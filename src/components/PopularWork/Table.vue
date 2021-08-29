@@ -12,7 +12,7 @@
                             <tr class="bg-gray-900 text-gray-100 uppercase text-sm leading-normal">
                                 <th class="py-3 px-6 text-left">Title</th>
                                 <th class="py-3 px-6 text-center">View</th>
-                                <th class="py-3 px-6 text-center">Description</th>
+                                <th class="py-3 px-6 text-left">Description</th>
                                 <th class="py-3 px-6 text-center">Actions</th>
                             </tr>
                         </thead>
@@ -26,20 +26,20 @@
                                   </div>
                                 </td>
                                 <td class="py-3 px-6 text-left">
-                                  <div class="flex items-center">
+                                  <div class="flex justify-center">
                                     <div class="mr-2">
-                                      <img class="rounded" width="100" height="100" :src="item.url"/>
+                                      <img class="rounded" width="100" height="100" :src="item.imageData"/>
                                     </div>
                                   </div>
                                 </td>
                                 <td class="py-3 px-6 text-left w-40 whitespace-wrap">
-                                    <div class="flex items-center w-40">
+                                    <div class="flex items-center w-40 flex-wrap">
                                         <span class="font-medium">{{ item.description }}</span>
                                     </div>
                                 </td>
                                 <td class="py-3 px-6 text-center">
                                     <div class="flex item-center justify-center">
-                                        <div @click.prevent="showModal(item)" class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                        <div @click.prevent="showModal(item)" class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />

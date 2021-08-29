@@ -57,8 +57,8 @@ const routes = [
       },
       {
         path: '/navbar',
-        name: 'Story',
-        component: () => import('../views/main/Story/Story.vue')
+        name: 'Navbar',
+        component: () => import('../views/main/Navbar/Navbar.vue')
       },
       {
         path: '/footer',
@@ -85,6 +85,17 @@ const routes = [
         name: 'Input Contact',
         component: () => import('../views/main/Contact/FormContact.vue')
       },
+
+      {
+        path: '/inputNavbar',
+        name: 'Input Navbar',
+        component: () => import('../views/main/Navbar/InputNavbar.vue')
+      },
+      {
+        path: '/inputFooter',
+        name: 'Input Footer',
+        component: () => import('../views/main/Footer/InputFooter.vue')
+      },
       {
         path: '/inputHeroSection',
         name: 'Input Hero Section',
@@ -107,13 +118,23 @@ const routes = [
       },
       {
         path: '/ContactEdit/:id',
-        name: 'Edit Item Hero Section',
+        name: 'Edit Item Contact',
         component: () => import('../views/main/Contact/FormContact.vue')
       },
       {
         path: '/StoryEdit/:id',
-        name: 'Edit Item Popular Work',
+        name: 'Edit Item Story',
         component: () => import('../views/main/Story/FormStory.vue')
+      },
+      {
+        path: '/NavbarEdit/:id',
+        name: 'Edit Item Navbar',
+        component: () => import('../views/main/Navbar/InputNavbar.vue')
+      },
+      {
+        path: '/FooterEdit/:id',
+        name: 'Edit Item Footer',
+        component: () => import('../views/main/Footer/InputFooter.vue')
       }
     ]
   },

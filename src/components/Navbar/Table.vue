@@ -28,13 +28,13 @@
                         <td class="py-3 px-6 text-left">
                           <div class="flex items-center">
                             <div class="flex items-center">
-                              <span class="font-medium truncate">{{ item.CategoryId }}</span>
+                              <span class="font-medium truncate">{{ item.Category.name }}</span>
                             </div>
                           </div>
                         </td>
-                        <td class="py-3 px-6 text-left whitespace-wrap">
-                            <div class="flex items-center ">
-                                <span class="font-medium truncate">{{ item.isActive }}</span>
+                        <td class="py-3 px-6 text-center whitespace-wrap">
+                            <div class="flex justify-center">
+                                <span class="font-medium">{{ item.isActive }}</span>
                             </div>
                         </td>
                         <td class="py-3 px-6 text-center">

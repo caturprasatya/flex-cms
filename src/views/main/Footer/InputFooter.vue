@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Form from '@/components/Navbar/InputForm.vue'
+import Form from '@/components/Footer/InputForm.vue'
 
 export default {
   components: {
@@ -13,7 +13,7 @@ export default {
   },
   created () {
     if (this.$route.params?.id) {
-      this.$store.dispatch('getCategoryById', { id: this.$route.params?.id })
+      this.$store.dispatch('getFooterById', { id: this.$route.params?.id })
     }
   }
 }

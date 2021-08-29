@@ -19,15 +19,10 @@
       </div>
       <!-- right navbar -->
       <div class="flex items-center relative">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" class="w-12 h-12 rounded-full shadow-lg" @click="dropDownOpen = !dropDownOpen">
+        <button class="button button--pandora" @click.prevent="logout"><span>Logout</span></button>
+        <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" class="w-12 h-12 rounded-full shadow-lg" @click="dropDownOpen = !dropDownOpen"> -->
       </div>
     </div>
-
-    <!-- dropdown menu -->
-    <div class="absolute bg-gray-300 border border-t-0 shadow-xl text-gray-700 rounded-b-lg w-48 -bottom-1 right-0 mr-6" :class="dropDownOpen ? '' : 'hidden'">
-      <a href="#" class="block px-4 py-2 hover:bg-gray-200" @click.prevent="logout">Logout</a>
-    </div>
-    <!-- dropdown menu end -->
   </div>
 </template>
 
@@ -56,3 +51,47 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .button {
+    pointer-events: auto;
+    cursor: pointer;
+    background: #e7e7e7;
+    border: none;
+    padding: 1.5rem 1rem;
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    position: relative;
+    display: inline-block;
+  }
+
+  .button::before,
+  .button::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .button--pandora {
+    background: #082032;
+    font-weight: 700;
+    padding: 0;
+    border-radius: 5px;
+  }
+
+  .button--pandora span {
+    display: block;
+    background: #a7a7a7;
+    padding: 0.8rem 0.5rem;
+    border: 1px solid #334756;
+    border-radius: 5px;
+    transform: translate3d(-4px, -4px, 0);
+    transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+  }
+
+  .button--pandora:hover span {
+    transform: translate3d(-8px, -8px, 0);
+  }
+</style>

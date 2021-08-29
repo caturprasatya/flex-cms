@@ -8,6 +8,11 @@
     /> -->
     <div class="absolute opacity-60 inset-0 z-0"/>
       <div class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
+        <router-link to="/contact" class="nav-link" aria-current="page">
+          <div class="flex justify-end">
+              <button class="absolute top-0 z-12 bg-blue-500 text-white p-2 rounded hover:bg-blue-800">Close</button>
+          </div>
+        </router-link>
         <div class="text-center">
           <h2 class="mt-5 text-3xl font-bold text-gray-900">
             File Upload!

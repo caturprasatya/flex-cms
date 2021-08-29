@@ -9,8 +9,8 @@
                       <th class="py-3 px-6 text-left">No</th>
                       <th class="py-3 px-6 text-left">Name</th>
                       <th class="py-3 px-6 text-left">Role</th>
-                      <th class="py-3 px-6 text-center">Phone Number</th>
-                      <th class="py-3 px-6 text-center">Email</th>
+                      <th class="py-3 px-6 text-left">Phone Number</th>
+                      <th class="py-3 px-6 text-left">Email</th>
                       <th class="py-3 px-6 text-center">Action</th>
                     </tr>
                   </thead>

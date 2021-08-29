@@ -4,6 +4,11 @@
     <!-- <div v-if="$route.name === 'Edit File' && !$store.isEditPage">
     </div> -->
     <div class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
+      <router-link to="/" class="nav-link" aria-current="page">
+        <div class="flex justify-end">
+            <button class="absolute top-0 z-12 bg-blue-500 text-white p-2 rounded hover:bg-blue-800">Close</button>
+        </div>
+      </router-link>
       <div class="text-center">
         <h2 class="mt-5 text-3xl font-bold text-gray-900">
           File Upload!
@@ -140,7 +145,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { storage } from '../../configs/firebase'
 import ImageUplaoder from 'vue-image-upload-resize'
 
 export default {
@@ -151,7 +155,7 @@ export default {
       file: {
         title: '',
         description: '',
-        url: '',
+        imagaeData: '',
         type: '',
         CategoryId: 0
       },
@@ -169,13 +173,13 @@ export default {
     setImage: function (output) {
       this.hasImage = true
       this.image = output
-      console.log(output.info)
+      console.log(output)
     },
     clearFile () {
       this.file = {
         title: '',
         description: '',
-        url: '',
+        imagaeData: '',
         type: '',
         CategoryId: 0
       }
@@ -187,59 +191,49 @@ export default {
       this.isEditVideo = false
     },
     onUploadImage () {
+      console.log('masukkk bossss')
       if (this.type === 'editPage' && !this.image && this.file.type === 'photo') {
         this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
         this.clearFile()
         return
       }
-      if (this.type === 'editPage' && !this.image && this.file.type === 'video') {
-        // this.clearFile()
+      if (this.image) {
+        this.file.imageData = this.image.dataUrl
+      }
+      if (this.file.type === 'photo') {
+        this.$store.dispatch('addPopularWork', this.file)
+        this.clearFile()
         return
       }
-      const uploadTask = storage.ref(`popularWork/${this.image.info?.name}`).putString(this.image.dataUrl.split(',')[1], 'base64', { contentType: 'image/png' })
-      uploadTask.on(
-        'state_changed',
-        snapshot => {
-          const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
-          this.progressBarImage = progress
-        },
-        error => {
-          console.error(error)
-        },
-        () => {
-          storage
-            .ref('popularWork')
-            .child(this.image.info?.name)
-            .getDownloadURL()
-            .then(downloadUrl => {
-              this.file.url = downloadUrl
-              if (this.file.type === 'photo') {
-                this.$store.dispatch('addPopularWork', { ...this.file })
-                this.clearFile()
-              }
-              if (this.file.type === 'photo' && this.type === 'editPage') {
-                this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
-                this.clearFile()
-              }
-              this.onUploadVideo()
-            })
-        }
-      )
+      if (this.file.type === 'photo' && this.type === 'editPage') {
+        this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
+        this.clearFile()
+        return
+      }
+      console.log('aman tersaring buat image kok')
+      this.onUploadVideo()
     },
     async onUploadVideo () {
-      if (this.type === 'editPage' && this.video_url !== this.isEditVideo) {
+      const onChange = this.video_url.search('theme')
+      console.log(onChange)
+      if (this.type === 'editPage' && this.video_url !== this.isEditVideo && onChange > 0) {
         this.$store.dispatch('editPopularWork', {
           ...this.file,
           id: this.$route.params?.id,
-          video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&controls=0&autoplay=1&loop=1&rel=0'
+          video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&autoplay=1&loop=1&rel=0&controls=1'
         })
+        console.log('test in diference url')
         return
       }
-      if (this.type === 'ediPage') {
+      if (this.type === 'editPage') {
+        console.log(this.file)
+        console.log(this.type)
         this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
+        console.log('test in same url')
         return
       }
-      if (this.file.url.length) {
+      if (this.video_url.length && this.type === 'addPage') {
+        console.log('test in add url')
         this.$store.dispatch('addPopularWork', { ...this.file, video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&controls=0&autoplay=1&loop=1&rel=0' })
       }
       this.clearFile()
@@ -269,21 +263,21 @@ export default {
       //   }
       // )
     },
-    deleteFileUpload () {
-      if (this.file_data) {
-        // Create a reference to the file to delete
-        const desertRef = storage.ref(`media/${this.file_data?.name}`)
-        // Delete the file
-        desertRef.delete().then(function () {
-          // File deleted successfully
-        }).catch(function (error) {
-          // Uh-oh, an error occurred!
-          console.log(error)
-        })
-      } else {
-        console.log('not handle')
-      }
-    },
+    // deleteFileUpload () {
+    //   if (this.file_data) {
+    //     // Create a reference to the file to delete
+    //     const desertRef = storage.ref(`media/${this.file_data?.name}`)
+    //     // Delete the file
+    //     desertRef.delete().then(function () {
+    //       // File deleted successfully
+    //     }).catch(function (error) {
+    //       // Uh-oh, an error occurred!
+    //       console.log(error)
+    //     })
+    //   } else {
+    //     console.log('not handle')
+    //   }
+    // },
     async uploadData () {
       this.onUploadImage()
     },
