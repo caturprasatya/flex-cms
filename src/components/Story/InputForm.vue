@@ -10,7 +10,7 @@
       <label for="other" class="text-sm font-bold text-gray-500 tracking-wide">
         <span>Story</span>
         <textarea type="text" id="name" v-on:keyup="keyMonitor" v-model="text"
-          class="w-full p-3 font-thin transition duration-200 focus:bg-gray-50 h-60 hover:bg-gray-50 focus:shadow-md focus:outline-none ring-offset-2 rounded-lg focus:ring-2 focus:ring-purple-300" />
+          class="w-full p-3 font-thin transition duration-200 focus:bg-gray-50 h-60 hover:bg-gray-50 focus:shadow-md focus:outline-none ring-offset-2 rounded-lg focus:ring-2 focus:ring-purple-300"/>
         <label class="text-sm font-semibold text-gray-500">Create dinamic Story.</label>
         <div class="flex justify-center">
           <button type="submit" class="my-2 w-1/2 flex justify-center bg-blue-500 text-gray-100 p-2 rounded-full tracking-wide

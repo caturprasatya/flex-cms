@@ -1,6 +1,6 @@
 <template>
   <div class="relative min-h-screen flex justify-center py-3 px-4 sm:px-6 lg:px-8 items-center">
-    <div class="absolute opacity-60 inset-0 z-0"/>
+    <div class="absolute opacity-60 inset-0 z-0"></div>
     <!-- <div v-if="$route.name === 'Edit File' && !$store.isEditPage">
     </div> -->
     <div class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
@@ -33,7 +33,9 @@
         </div>
         <div class="grid grid-cols-1 space-y-2">
           <label class="text-sm font-bold text-gray-500 tracking-wide">Category</label>
-          <svg class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 232"><path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero"/></svg>
+            <svg class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 232">
+              <path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero"></path>
+            </svg>
           <select v-model="file.CategoryId" class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-grey-200 hover:border-gray-400 focus:outline-none appearance-none">
             <option v-for="(category, i) in categories" :key="i" :value="category.id" :selected="file.CategoryId === category.id"> {{ category.name }} </option>
           </select>
@@ -219,7 +221,7 @@ export default {
         this.$store.dispatch('editPopularWork', {
           ...this.file,
           id: this.$route.params?.id,
-          video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&autoplay=1&loop=1&rel=0&controls=1'
+          video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&autoplay=1&loop=1&rel=0&'
         })
         return
       }
@@ -228,7 +230,7 @@ export default {
         return
       }
       if (this.video_url.length && this.type === 'addPage') {
-        this.$store.dispatch('addPopularWork', { ...this.file, video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&controls=0&autoplay=1&loop=1&rel=0' })
+        this.$store.dispatch('addPopularWork', { ...this.file, video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&autoplay=1&loop=1&rel=0' })
       }
       this.clearFile()
       // const uploadTask = storage.ref(`popularWork/${this.video.name}`).put(this.video)

@@ -6,7 +6,7 @@
       :size="55"
       color="#ff1d5e"
     /> -->
-    <div class="absolute opacity-60 inset-0 z-0"/>
+    <div class="absolute opacity-60 inset-0 z-0"></div>
       <div class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
         <router-link to="/contact" class="nav-link" aria-current="page">
           <div class="flex justify-end">

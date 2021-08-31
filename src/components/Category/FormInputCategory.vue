@@ -1,6 +1,6 @@
 <template>
   <div class="relative flex justify-center py-3">
-    <div class="absolute opacity-60 inset-0 z-0"/>
+    <div class="absolute opacity-60 inset-0 z-0"></div>
     <div class="sm:max-w-lg w-full p-3 bg-gray-300 shadow rounded-xl z-10">
       <router-link to="/category" class="nav-link" aria-current="page">
         <div class="flex justify-end">
