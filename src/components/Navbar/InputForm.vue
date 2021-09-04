@@ -8,14 +8,11 @@
     /> -->
     <div class="absolute opacity-60 inset-0 z-0"></div>
       <div class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
-        <router-link to="/service" class="nav-link" aria-current="page">
+        <router-link to="/navbar" class="nav-link" aria-current="page">
           <div class="flex justify-end">
             <button class="absolute top-0 z-12 bg-blue-500 text-white p-2 rounded hover:bg-blue-800">Close</button>
           </div>
         </router-link>
-      <div class="flex justify-end lg:hidden">
-        <button class="absolute top-0 z-12 bg-blue-500 text-white p-2 rounded hover:bg-blue-800">Close</button>
-      </div>
         <div class="text-center">
           <h2 class="mt-5 text-3xl font-bold text-gray-900">
             File Upload!
@@ -45,7 +42,7 @@
               </label>
             </div>
           </div>
-          <textarea type="text" id="name" v-on:keyup="keyMonitor" v-model="file.textHtml"
+          <textarea type="text" id="name" v-model="file.textHtml"
             class="w-full p-3 font-thin transition duration-200 focus:bg-gray-50 h-60 hover:bg-gray-50 focus:shadow-md focus:outline-none ring-offset-2 rounded-lg focus:ring-2 focus:ring-purple-300"/>
           <label class="text-sm font-semibold text-gray-500">Create dinamic Story.</label>
           <!-- <div class="grid grid-cols-1 space-y-2">
@@ -94,6 +91,7 @@ export default {
       this.$store.dispatch('addNavbar', this.file)
     },
     detailData () {
+      console.log(this.$store.state.detailNavbar)
       if (this.type === 'editPage') {
         this.file = this.$store.state.detailNavbar
         this.file.isActive = `${this.$store.state.detailNavbar.isActive}`
@@ -111,8 +109,6 @@ export default {
     editData () {
       this.onUpload()
     }
-  },
-  created () {
   },
   computed: {
     ...mapState(['categories'])

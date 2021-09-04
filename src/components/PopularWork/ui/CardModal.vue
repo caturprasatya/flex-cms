@@ -15,7 +15,7 @@
           <span class="px-2 hover:bg-gray-300 cursor-pointer rounded"><i class="fas fa-ellipsis-h pt-2 text-lg"></i></span>
         </div>
         <div class="flex justify-center">
-          <iframe v-if="detailPopularWork.type === 'video'"
+          <iframe
               width="100%"
               height="400"
               :src="detailPopularWork.video_url"
@@ -26,13 +26,6 @@
               scrolling = "no"
             >
             </iframe>
-          <img
-            v-else
-            width="100%"
-            height="400"
-            class="lg:w-3/4 md:w-1/3 sm:w-1/2 bg-cover"
-            :src="detailPopularWork.url"
-            >
         </div>
         <div class="px-3 pb-2">
           <span class="mr-2 font-extrabold font-mono text-xl pt-2"> {{detailPopularWork.title}} </span>

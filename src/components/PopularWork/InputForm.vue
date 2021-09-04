@@ -197,16 +197,16 @@ export default {
     },
     async onUploadVideo () {
       const onChange = this.video_url.search('theme')
-      if (this.type === 'editPage' && this.video_url !== this.isEditVideo && onChange > 0) {
+      if (this.type === 'editPage' && onChange > 0) {
+        this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id, video_url: this.video_url })
+        return
+      }
+      if (this.type === 'editPage' && onChange < 0) {
         this.$store.dispatch('editPopularWork', {
           ...this.file,
           id: this.$route.params?.id,
-          video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&autoplay=1&loop=1&rel=0&'
+          video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&autoplay=1&loop=1&rel=0'
         })
-        return
-      }
-      if (this.type === 'editPage') {
-        this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
         return
       }
       if (this.video_url.length && this.type === 'addPage') {

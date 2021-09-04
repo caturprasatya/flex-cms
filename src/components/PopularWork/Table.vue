@@ -103,7 +103,6 @@ export default {
       this.$store.dispatch('getPopularWorkById', { id, isEdit: false })
     },
     async showModal (payload) {
-      console.log(payload)
       // await this.$$store.commit('setLoadingDetail', true)
       await this.$store.commit('setDetailPopularWork', payload)
       // await this.$$store.commit('setLoadingDetail', false)

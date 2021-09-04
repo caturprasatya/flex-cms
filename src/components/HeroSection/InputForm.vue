@@ -55,6 +55,54 @@
               </label>
             </div>
           </div>
+           <div
+          class="grid grid-cols-1 space-y-2">
+          <label class="text-sm font-bold text-gray-500 tracking-wide">{{ file.type !== 'video' ? 'Attach Files' : 'Select Image For Cover'}}</label>
+          <div class="flex items-center justify-center w-full">
+            <label class="flex flex-col rounded-lg border-4 border-dashed w-full h-70 p-10 group text-center">
+              <div class="h-full w-full text-center flex flex-col justify-center items-center  ">
+                <ImageUplaoder
+                  :preview="true"
+                  :className="['fileinput', { 'fileinput--loaded': hasImage }]"
+                  capture="environment"
+                  :quality="0.7"
+                  :debug="1"
+                  :maxWidth="1280"
+                  :maxHeight="720"
+                  doNotResize="gif"
+                  :autoRotate="true"
+                  outputFormat="verbose"
+                  @input="setImage"
+                  accept="image/*"
+                >
+                  <label
+                  ref="input"
+                  class="flex flex-col justify-center items-center max-h-48 w-full mx-auto mt-10"
+                  for="fileInput"
+                  slot="upload-label"
+                  >
+                    <figure>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      viewBox="0 0 32 32"
+                    >
+                      <path
+                        class="path1"
+                        d="M9.5 19c0 3.59 2.91 6.5 6.5 6.5s6.5-2.91 6.5-6.5-2.91-6.5-6.5-6.5-6.5 2.91-6.5 6.5zM30 8h-7c-0.5-2-1-4-3-4h-8c-2 0-2.5 2-3 4h-7c-1.1 0-2 0.9-2 2v18c0 1.1 0.9 2 2 2h28c1.1 0 2-0.9 2-2v-18c0-1.1-0.9-2-2-2zM16 27.875c-4.902 0-8.875-3.973-8.875-8.875s3.973-8.875 8.875-8.875c4.902 0 8.875 3.973 8.875 8.875s-3.973 8.875-8.875 8.875zM30 14h-4v-2h4v2z"
+                      ></path>
+                    </svg>
+                  </figure>
+                  <span class="upload-caption">{{
+                    hasImage ? "Replace" : "Click to upload"
+                  }}</span>
+                  </label>
+                </ImageUplaoder>
+              </div>
+            </label>
+          </div>
+        </div>
           <div>
             <button type="submit" class="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
               font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
@@ -77,6 +125,7 @@
 <script>
 import { storage } from '../../configs/firebase'
 import ProgressBar from './ui/ProgressBar.vue'
+import ImageUplaoder from 'vue-image-upload-resize'
 
 export default {
   name: 'InputForm',
@@ -92,7 +141,9 @@ export default {
       progress: 0,
       video: null,
       videoUrl: null,
-      isUpload: false
+      isUpload: false,
+      hasImage: false,
+      image: null
     }
   },
   methods: {
@@ -100,7 +151,14 @@ export default {
       this.video = event.target.files[0]
       this.videoUrl = URL.createObjectURL(event.target.files[0])
     },
+    setImage: function (output) {
+      this.hasImage = true
+      this.image = output
+    },
     onUpload () {
+      if (this.image) {
+        this.file.imageData = this.image.dataUrl
+      }
       if (this.type === 'editPage' && !this.video) {
         this.$store.dispatch('editHeroSection', { ...this.file, id: this.$route.params?.id })
         return
@@ -184,7 +242,8 @@ export default {
   computed: {
   },
   components: {
-    ProgressBar
+    ProgressBar,
+    ImageUplaoder
   },
   mounted () {
     this.detailData()

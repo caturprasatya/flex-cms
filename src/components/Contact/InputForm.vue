@@ -97,6 +97,7 @@ export default {
     detailData () {
       // ...mapState([])
       this.file = this.$store.state.detailContact
+      console.log(this.$store.state.detailContact)
     },
     uploadData () {
       this.onUpload()

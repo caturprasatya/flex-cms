@@ -46,7 +46,7 @@ export default new Vuex.Store({
     setContacts (state, payload) {
       state.contacts = payload
     },
-    setContact (state, payload) {
+    setDetailContact (state, payload) {
       state.detailContact = payload
     },
     setStories (state, payload) {
