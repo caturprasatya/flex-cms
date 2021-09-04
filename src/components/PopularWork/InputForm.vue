@@ -41,7 +41,7 @@
           </select>
         </div>
         <!-- This is an example component -->
-        <div class="grid grid-cols-1 space-y-2">
+        <!-- <div class="grid grid-cols-1 space-y-2">
           <label class="text-sm font-bold text-gray-500 tracking-wide">Type Data</label>
           <div class="flex justify-evenly border-gray-300 bg-gray-200 rounded-full overflow-hidden select-none">
             <label class="flex radio p-2 cursor-pointer">
@@ -53,7 +53,7 @@
               <div class="title px-2">Video</div>
             </label>
           </div>
-        </div>
+        </div> -->
         <div
           class="grid grid-cols-1 space-y-2">
           <label class="text-sm font-bold text-gray-500 tracking-wide">{{ file.type !== 'video' ? 'Attach Files' : 'Select Image For Cover'}}</label>
@@ -103,7 +103,6 @@
           </div>
         </div>
         <div
-          v-if="file.type === 'video'"
           class="grid grid-cols-1 space-y-2">
           <label class="text-sm font-bold text-gray-500 tracking-wide">Attach Files </label>
             <textarea
@@ -158,7 +157,6 @@ export default {
         title: '',
         description: '',
         imagaeData: '',
-        type: '',
         CategoryId: 0
       },
       progressBarImage: 0,
@@ -175,7 +173,6 @@ export default {
     setImage: function (output) {
       this.hasImage = true
       this.image = output
-      console.log(output)
     },
     clearFile () {
       this.file = {
@@ -193,26 +190,9 @@ export default {
       this.isEditVideo = false
     },
     onUploadImage () {
-      console.log('masukkk bossss')
-      if (this.type === 'editPage' && !this.image && this.file.type === 'photo') {
-        this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
-        this.clearFile()
-        return
-      }
       if (this.image) {
         this.file.imageData = this.image.dataUrl
       }
-      if (this.file.type === 'photo') {
-        this.$store.dispatch('addPopularWork', this.file)
-        this.clearFile()
-        return
-      }
-      if (this.file.type === 'photo' && this.type === 'editPage') {
-        this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
-        this.clearFile()
-        return
-      }
-      console.log('aman tersaring buat image kok')
       this.onUploadVideo()
     },
     async onUploadVideo () {
@@ -280,11 +260,8 @@ export default {
     onEditPage () {
       if (this.type === 'editPage') {
         this.file = this.$store.state.detailPopularWork
-        if (this.file.type === 'video') {
-          this.isEditVideo = this.file.video_url
-          this.video = true
-          this.video_url = this.file.video_url
-        }
+        this.isEditVideo = this.file.video_url
+        this.video_url = this.file.video_url
       } else {
         this.clearFile()
       }

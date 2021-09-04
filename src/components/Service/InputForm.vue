@@ -9,7 +9,7 @@
         </router-link>
       <label for="other" class="text-sm font-bold text-gray-500 tracking-wide">
         <span>Story</span>
-        <textarea type="text" id="name" v-on:keyup="keyMonitor" v-model="textHtml"
+        <textarea type="text" id="name" v-on:keyup="keyMonitor" v-model="text"
           class="w-full p-3 font-thin transition duration-200 focus:bg-gray-50 h-60 hover:bg-gray-50 focus:shadow-md focus:outline-none ring-offset-2 rounded-lg focus:ring-2 focus:ring-purple-300"/>
         <label class="text-sm font-semibold text-gray-500">Create dinamic Story.</label>
         <div class="flex justify-center">
@@ -35,23 +35,23 @@ export default {
   },
   methods: {
     inputStory () {
-      this.$store.dispatch('addStory', { textHtml: this.textHtml })
+      this.$store.dispatch('addService', { textHtml: this.textHtml })
     },
     keyMonitor (event) {
       // if (event.key === 'enter') {
-      //   this.inputStory()
+      //   this.inputService()
       // }
     },
     uploadData () {
       if (this.type === 'editPage') {
-        this.$store.dispatch('editStory', { textHtml: this.textHtml, id: this.$route.params?.id })
+        this.$store.dispatch('editService', { textHtml: this.textHtml, id: this.$route.params?.id })
         return
       }
-      this.$store.dispatch('addStory', { textHtml: this.textHtml })
+      this.$store.dispatch('addService', { textHtml: this.textHtml })
     },
     editPage () {
       if (this.type === 'editPage') {
-        this.textHtml = this.$store.state.detailStory?.textHtml
+        this.textHtml = this.$store.state.detailService?.textHtml
       }
     }
   },

@@ -6,8 +6,8 @@
               <table class="min-w-max w-full table-auto">
                   <thead>
                     <tr class="bg-gray-900 text-gray-100 uppercase text-sm leading-normal">
-                      <th class="py-3 px-6 text-center">Story</th>
-                      <th class="py-3 px-6 text-center">Actions</th>
+                      <th class="py-3 px-6 text-center">Service</th>
+                      <th class="py-3 px-6 text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody v-for="(item, index) in stories" :key="index" class="text-gray-100 text-sm font-light">

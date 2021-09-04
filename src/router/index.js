@@ -51,6 +51,11 @@ const routes = [
         component: () => import('../views/main/Story/Story.vue')
       },
       {
+        path: '/service',
+        name: 'Service',
+        component: () => import('../views/main/Service/Service.vue')
+      },
+      {
         path: '/contact',
         name: 'Contact',
         component: () => import('../views/main/Contact/Contact.vue')
@@ -62,7 +67,7 @@ const routes = [
       },
       {
         path: '/footer',
-        name: 'Contact',
+        name: 'Footer',
         component: () => import('../views/main/Footer/Footer.vue')
       },
       {
@@ -113,7 +118,7 @@ const routes = [
       },
       {
         path: '/CategoryEdit/:id',
-        name: 'Edit Item Popular Work',
+        name: 'Edit Item On Category Work',
         component: () => import('../views/main/Category/InputCategory.vue')
       },
       {
@@ -125,6 +130,11 @@ const routes = [
         path: '/StoryEdit/:id',
         name: 'Edit Item Story',
         component: () => import('../views/main/Story/FormStory.vue')
+      },
+      {
+        path: '/ServiceEdit/:id',
+        name: 'Edit Item Service',
+        component: () => import('../views/main/Service/FormService.vue')
       },
       {
         path: '/NavbarEdit/:id',

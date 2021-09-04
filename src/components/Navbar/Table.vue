@@ -8,7 +8,7 @@
                     <tr class="bg-gray-900 text-gray-100 uppercase text-sm leading-normal">
                       <th class="py-3 px-6 text-left">No</th>
                       <th class="py-3 px-6 text-left">Name</th>
-                      <th class="py-3 px-6 text-left">Category</th>
+                      <th class="py-3 px-6 text-left">Teks</th>
                       <th class="py-3 px-6 text-center">isActive</th>
                       <th class="py-3 px-6 text-center">Action</th>
                     </tr>
@@ -25,11 +25,9 @@
                             <span class="font-medium truncate">{{ item.name }}</span>
                           </div>
                         </td>
-                        <td class="py-3 px-6 text-left">
-                          <div class="flex items-center">
-                            <div class="flex items-center">
-                              <span class="font-medium truncate">{{ item.Category.name }}</span>
-                            </div>
+                        <td class="py-3 px-6 justify-self-center max-w-xs h-12">
+                          <div class="flex justify-center items-center whitespace-wrap">
+                            <span class=" font-semibold text-base ">{{ item.textHtml }}</span>
                           </div>
                         </td>
                         <td class="py-3 px-6 text-center whitespace-wrap">
