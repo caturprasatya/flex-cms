@@ -14,7 +14,7 @@ export default {
   methods: {
     reloadEditRouter () {
       if (this.$route.params?.id) {
-        this.$store.dispatch('getStoryById', { id: this.$route.params?.id, isEdit: true })
+        this.$store.dispatch('getServiceById', { id: this.$route.params?.id, isEdit: true })
       }
     }
   },

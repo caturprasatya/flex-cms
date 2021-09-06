@@ -16,6 +16,8 @@ export default new Vuex.Store({
     contacts: [],
     footers: [],
     navbars: [],
+    services: [],
+    detailService: {},
     detailStory: {},
     detailFooter: {},
     detailNavbar: {},
@@ -23,7 +25,7 @@ export default new Vuex.Store({
     detailCategory: {},
     detailPopularWork: {},
     detailHeroSection: {},
-    isLoadingDetailPW: false,
+    isLoading: false,
     search: '',
     sideBarOpen: false,
     isEditPage: false,
@@ -48,6 +50,12 @@ export default new Vuex.Store({
     },
     setDetailContact (state, payload) {
       state.detailContact = payload
+    },
+    setServices (state, payload) {
+      state.services = payload
+    },
+    setDetailService (state, payload) {
+      state.detailService = payload
     },
     setStories (state, payload) {
       state.stories = payload
@@ -76,8 +84,8 @@ export default new Vuex.Store({
     setProgressBar (state, payload) {
       state.progress = payload
     },
-    setLoadingDetail (state, boolean) {
-      state.isLoadingDetailPW = boolean
+    setLoading (state, boolean) {
+      state.isLoading = boolean
     },
     toggleSidebar (state) {
       state.sideBarOpen = !state.sideBarOpen
@@ -90,7 +98,8 @@ export default new Vuex.Store({
     toggleSidebar (context) {
       context.commit('toggleSidebar')
     },
-    errorsHandler (_, payload) {
+    errorsHandler ({ commit }, payload) {
+      commit('setLoading', false)
       let errors = payload.data.message
       if (payload.status === 400) {
         errors = ''
@@ -110,14 +119,29 @@ export default new Vuex.Store({
           url: '/login',
           data: payload
         })
-        console.log(data)
         localStorage.setItem('access_token', data.token)
         router.push('/')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
+    async userUpdate ({ dispatch }, payload) {
+      try {
+        await axios({
+          method: 'PUT',
+          url: '/update',
+          headers: {
+            'X-Access-Token': localStorage.getItem('access_token')
+          },
+          data: payload
+        })
+        router.push('/')
+      } catch ({ response }) {
+        dispatch('errorsHandler', response)
+      }
+    },
     async fetchPopularWorks ({ commit, dispatch }) {
+      commit('setLoading', true)
       try {
         const { data } = await axios({
           method: 'GET',
@@ -126,12 +150,14 @@ export default new Vuex.Store({
             'X-Access-Token': localStorage.getItem('access_token')
           }
         })
+        commit('setLoading', false)
         commit('setPopularWorks', data.items)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async addPopularWork ({ dispatch }, payload) {
+    async addPopularWork ({ commit, dispatch }, payload) {
+      commit('setLoading', true)
       try {
         await axios({
           method: 'POST',
@@ -151,13 +177,15 @@ export default new Vuex.Store({
         //     popup: 'animate__animated animate__fadeOutUp'
         //   }
         // })
+        commit('setLoading', false)
         router.push('/')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async editPopularWork ({ dispatch }, payload) {
+    async editPopularWork ({ commit, dispatch }, payload) {
       const { id } = payload
+      commit('setLoading', true)
       try {
         await axios({
           method: 'PUT',
@@ -168,6 +196,7 @@ export default new Vuex.Store({
           data: payload
         })
         dispatch('fetchPopularWorks')
+        commit('setLoading', false)
         router.push('/')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
@@ -213,6 +242,7 @@ export default new Vuex.Store({
     },
     // !================== HeroSection ================================
     async fetchHeroSections ({ commit, dispatch }) {
+      commit('setLoading', true)
       try {
         const { data } = await axios({
           method: 'GET',
@@ -221,12 +251,14 @@ export default new Vuex.Store({
             'X-Access-Token': localStorage.getItem('access_token')
           }
         })
+        commit('setLoading', false)
         commit('setHeroSections', data.videos)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async addHeroSection ({ dispatch }, payload) {
+    async addHeroSection ({ commit, dispatch }, payload) {
+      commit('setLoading', true)
       try {
         await axios({
           method: 'POST',
@@ -237,6 +269,7 @@ export default new Vuex.Store({
           data: payload
         })
         dispatch('fetchHeroSections')
+        commit('setLoading', false)
         // Vue.swal({
         //   title: 'Product Added',
         //   showClass: {
@@ -251,7 +284,8 @@ export default new Vuex.Store({
         dispatch('errorsHandler', response)
       }
     },
-    async editHeroSection ({ dispatch }, payload) {
+    async editHeroSection ({ commit, dispatch }, payload) {
+      commit('setLoading', true)
       const { id } = payload
       try {
         await axios({
@@ -263,6 +297,7 @@ export default new Vuex.Store({
           data: payload
         })
         dispatch('fetchHeroSections')
+        commit('setLoading', false)
         router.push('/banner')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
@@ -306,6 +341,7 @@ export default new Vuex.Store({
     },
     // !! ======================== CATEGORY =========================
     async fetchCategories ({ commit, dispatch }) {
+      commit('setLoading', true)
       try {
         const { data } = await axios({
           method: 'GET',
@@ -314,6 +350,7 @@ export default new Vuex.Store({
             'X-Access-Token': localStorage.getItem('access_token')
           }
         })
+        commit('setLoading', false)
         commit('setCategories', data.categories)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
@@ -339,7 +376,8 @@ export default new Vuex.Store({
         dispatch('errorsHandler', response)
       }
     },
-    async addCategory ({ dispatch }, payload) {
+    async addCategory ({ commit, dispatch }, payload) {
+      commit('setLoading', true)
       try {
         await axios({
           method: 'POST',
@@ -350,6 +388,7 @@ export default new Vuex.Store({
           }
         })
         dispatch('fetchCategories')
+        commit('setLoading', false)
         router.push('/category')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
@@ -372,8 +411,9 @@ export default new Vuex.Store({
         dispatch('errorsHandler', response)
       }
     },
-    async editCategory ({ dispatch }, payload) {
+    async editCategory ({ commit, dispatch }, payload) {
       const { id } = payload
+      commit('setLoading', true)
       try {
         await axios({
           method: 'PUT',
@@ -384,6 +424,7 @@ export default new Vuex.Store({
           }
         })
         await dispatch('fetchCategories')
+        commit('setLoading', true)
         router.push('/category')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
@@ -391,6 +432,7 @@ export default new Vuex.Store({
     },
     // !================== Contact ================================
     async fetchContacts ({ commit, dispatch }) {
+      commit('setLoading', true)
       try {
         const { data } = await axios({
           method: 'GET',
@@ -399,12 +441,14 @@ export default new Vuex.Store({
             'X-Access-Token': localStorage.getItem('access_token')
           }
         })
+        commit('setLoading', false)
         commit('setContacts', data.users)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async addContact ({ dispatch }, payload) {
+    async addContact ({ commit, dispatch }, payload) {
+      commit('setLoading', true)
       try {
         await axios({
           method: 'POST',
@@ -415,6 +459,7 @@ export default new Vuex.Store({
           data: payload
         })
         dispatch('fetchContacts')
+        commit('setLoading', true)
         // Vue.swal({
         //   title: 'Product Added',
         //   showClass: {
@@ -429,7 +474,8 @@ export default new Vuex.Store({
         dispatch('errorsHandler', response)
       }
     },
-    async editContact ({ dispatch }, payload) {
+    async editContact ({ commit, dispatch }, payload) {
+      commit('setLoading', true)
       const { id } = payload
       try {
         await axios({
@@ -441,6 +487,7 @@ export default new Vuex.Store({
           data: payload
         })
         dispatch('fetchContacts')
+        commit('setLoading', false)
         router.push('/contact')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
@@ -484,6 +531,7 @@ export default new Vuex.Store({
     },
     // !===================== Story ================================
     async fetchStories ({ commit, dispatch }) {
+      commit('setLoading', true)
       try {
         const { data } = await axios({
           method: 'GET',
@@ -492,13 +540,15 @@ export default new Vuex.Store({
             'X-Access-Token': localStorage.getItem('access_token')
           }
         })
+        commit('setLoading', false)
         commit('setStories', data.teks)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async addStory ({ dispatch }, payload) {
+    async addStory ({ commit, dispatch }, payload) {
       try {
+        commit('setLoading', true)
         await axios({
           method: 'POST',
           url: '/story',
@@ -508,6 +558,7 @@ export default new Vuex.Store({
           data: payload
         })
         dispatch('fetchStories')
+        commit('setLoading', false)
         // Vue.swal({
         //   title: 'Product Added',
         //   showClass: {
@@ -522,9 +573,10 @@ export default new Vuex.Store({
         dispatch('errorsHandler', response)
       }
     },
-    async editStory ({ dispatch }, payload) {
+    async editStory ({ commit, dispatch }, payload) {
       const { id } = payload
       try {
+        commit('setLoading', true)
         await axios({
           method: 'PUT',
           url: `/story/${id}`,
@@ -534,6 +586,7 @@ export default new Vuex.Store({
           data: payload
         })
         dispatch('fetchStories')
+        commit('setLoading', true)
         router.push('/story')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
@@ -578,23 +631,26 @@ export default new Vuex.Store({
     // !===================== Story ================================
     async fetchServices ({ commit, dispatch }) {
       try {
+        commit('setLoading', true)
         const { data } = await axios({
           method: 'GET',
-          url: '/service',
+          url: '/services',
           headers: {
             'X-Access-Token': localStorage.getItem('access_token')
           }
         })
-        commit('setServices', data.teks)
+        commit('setServices', data.texts)
+        commit('setLoading', true)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async addService ({ dispatch }, payload) {
+    async addService ({ commit, dispatch }, payload) {
       try {
+        commit('setLoading', true)
         await axios({
           method: 'POST',
-          url: '/service',
+          url: '/services',
           headers: {
             'X-Access-Token': localStorage.getItem('access_token')
           },
@@ -610,23 +666,26 @@ export default new Vuex.Store({
         //     popup: 'animate__animated animate__fadeOutUp'
         //   }
         // })
+        commit('setLoading', false)
         router.push('/service')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async editService ({ dispatch }, payload) {
+    async editService ({ commit, dispatch }, payload) {
       const { id } = payload
+      commit('setLoading', true)
       try {
         await axios({
           method: 'PUT',
-          url: `/service/${id}`,
+          url: `/services/${id}`,
           headers: {
             'X-Access-Token': localStorage.getItem('access_token')
           },
           data: payload
         })
         dispatch('fetchServices')
+        commit('setLoading', false)
         router.push('/service')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
@@ -636,12 +695,12 @@ export default new Vuex.Store({
       try {
         const { data } = await axios({
           method: 'GET',
-          url: `/service/${id}`,
+          url: `/services/${id}`,
           headers: {
             'X-Access-Token': localStorage.getItem('access_token')
           }
         })
-        commit('setService', data)
+        commit('setDetailService', data)
         if (!isEdit) {
           router.push(`/serviceEdit/${id}`)
         }
@@ -670,6 +729,7 @@ export default new Vuex.Store({
     },
     // !===================== Navbar ================================
     async fetchNavbars ({ commit, dispatch }) {
+      commit('setLoading', true)
       try {
         const { data } = await axios({
           method: 'GET',
@@ -678,12 +738,14 @@ export default new Vuex.Store({
             'X-Access-Token': localStorage.getItem('access_token')
           }
         })
+        commit('setLoading', false)
         commit('setNavbars', data.navbars)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async addNavbar ({ dispatch }, payload) {
+    async addNavbar ({ commit, dispatch }, payload) {
+      commit('setLoading', true)
       try {
         await axios({
           method: 'POST',
@@ -703,13 +765,15 @@ export default new Vuex.Store({
         //     popup: 'animate__animated animate__fadeOutUp'
         //   }
         // })
+        commit('setLoading', false)
         router.push('/Navbar')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async editNavbar ({ dispatch }, payload) {
+    async editNavbar ({ commit, dispatch }, payload) {
       const { id } = payload
+      commit('setLoading', true)
       try {
         await axios({
           method: 'PUT',
@@ -720,6 +784,7 @@ export default new Vuex.Store({
           data: payload
         })
         dispatch('fetchNavbars')
+        commit('setLoading', false)
         router.push('/Navbar')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
@@ -763,6 +828,7 @@ export default new Vuex.Store({
     },
     // !===================== Footer ================================
     async fetchFooters ({ commit, dispatch }) {
+      commit('setLoading', true)
       try {
         const { data } = await axios({
           method: 'GET',
@@ -771,12 +837,14 @@ export default new Vuex.Store({
             'X-Access-Token': localStorage.getItem('access_token')
           }
         })
+        commit('setLoading', false)
         commit('setFooters', data.socialMedia)
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async addFooter ({ dispatch }, payload) {
+    async addFooter ({ commit, dispatch }, payload) {
+      commit('setLoading', true)
       try {
         await axios({
           method: 'POST',
@@ -796,13 +864,15 @@ export default new Vuex.Store({
         //     popup: 'animate__animated animate__fadeOutUp'
         //   }
         // })
+        commit('setLoading', false)
         router.push('/Footer')
       } catch ({ response }) {
         dispatch('errorsHandler', response)
       }
     },
-    async editFooter ({ dispatch }, payload) {
+    async editFooter ({ commit, dispatch }, payload) {
       const { id } = payload
+      commit('setLoading', true)
       try {
         await axios({
           method: 'PUT',
@@ -813,6 +883,7 @@ export default new Vuex.Store({
           data: payload
         })
         dispatch('fetchFooters')
+        commit('setLoading', false)
         router.push('/footer')
       } catch ({ response }) {
         dispatch('errorsHandler', response)

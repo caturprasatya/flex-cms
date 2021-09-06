@@ -145,6 +145,11 @@ const routes = [
         path: '/FooterEdit/:id',
         name: 'Edit Item Footer',
         component: () => import('../views/main/Footer/InputFooter.vue')
+      },
+      {
+        path: '/UserEdit',
+        name: 'Edit Account Admin',
+        component: () => import('../views/main/User/FormUser.vue')
       }
     ]
   },

@@ -7,7 +7,8 @@
       color="#ff1d5e"
     /> -->
     <div class="absolute opacity-60 inset-0 z-0"></div>
-      <div class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
+      <PacmanLoader v-if="$store.state.isLoading" />
+      <div v-else class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
         <router-link to="/footer" class="nav-link" aria-current="page">
           <div class="flex justify-end">
               <button class="absolute top-0 z-12 bg-blue-500 text-white p-2 rounded hover:bg-blue-800">Close</button>
@@ -99,6 +100,7 @@
 
 <script>
 import ImageUplaoder from 'vue-image-upload-resize'
+import PacmanLoader from 'vue-spinner/src/PacmanLoader.vue'
 
 export default {
   name: 'InputForm',
@@ -160,7 +162,9 @@ export default {
   computed: {
   },
   components: {
-    ImageUplaoder
+    ImageUplaoder,
+    PacmanLoader
+
   },
   mounted () {
     this.detailData()

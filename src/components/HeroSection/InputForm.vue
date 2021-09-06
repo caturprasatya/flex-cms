@@ -7,7 +7,7 @@
       color="#ff1d5e"
     /> -->
     <div class="absolute opacity-60 inset-0 z-0"></div>
-      <ProgressBar v-if="isUpload" :progress="progress"/>
+      <ProgressBar v-if="isUpload" :progress="progress"></ProgressBar>
       <div v-if="!isUpload" class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
         <router-link to="/banner" class="nav-link" aria-current="page">
           <div class="flex justify-end">
@@ -37,7 +37,20 @@
               placeholder="Write Desc..." />
           </div>
           <div class="grid grid-cols-1 space-y-2">
-            <label class="text-sm font-bold text-gray-500 tracking-wide">Attach Files</label>
+          <label class="text-sm font-bold text-gray-500 tracking-wide">Choice for Display</label>
+          <div class="flex justify-evenly border-gray-300 bg-gray-200 rounded-full overflow-hidden select-none">
+            <label class="flex radio p-2 cursor-pointer">
+              <input class="my-auto transform scale-125" v-model="file.show" value="photo" type="radio" name="type" />
+              <div class="title px-2">Photo</div>
+            </label>
+            <label class="flex radio p-2 cursor-pointer">
+              <input class="my-auto transform scale-125" v-model="file.show" value="video" type="radio" name="type" />
+              <div class="title px-2">Video</div>
+            </label>
+          </div>
+        </div>
+          <div class="grid grid-cols-1 space-y-2">
+            <label class="text-sm font-bold text-gray-500 tracking-wide">Select Image</label>
             <div class="flex items-center justify-center w-full">
               <label class="flex flex-col rounded-lg border-4 border-dashed w-full h-70 p-10 group text-center">
                 <div class="h-full w-full text-center flex flex-col justify-center items-center  ">
@@ -57,7 +70,7 @@
           </div>
            <div
           class="grid grid-cols-1 space-y-2">
-          <label class="text-sm font-bold text-gray-500 tracking-wide">{{ file.type !== 'video' ? 'Attach Files' : 'Select Image For Cover'}}</label>
+          <label class="text-sm font-bold text-gray-500 tracking-wide">'Select Video</label>
           <div class="flex items-center justify-center w-full">
             <label class="flex flex-col rounded-lg border-4 border-dashed w-full h-70 p-10 group text-center">
               <div class="h-full w-full text-center flex flex-col justify-center items-center  ">
@@ -136,10 +149,11 @@ export default {
         title: '',
         desc: '',
         video_url: '',
+        show: '',
         imageData: 'https://images.unsplash.com/photo-1610008130029-5feca0b79a7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80'
       },
       progress: 0,
-      video: null,
+      video: '',
       videoUrl: null,
       isUpload: false,
       hasImage: false,
@@ -159,7 +173,7 @@ export default {
       if (this.image) {
         this.file.imageData = this.image.dataUrl
       }
-      if (this.type === 'editPage' && !this.video) {
+      if (this.type === 'editPage' && !this.video.length) {
         this.$store.dispatch('editHeroSection', { ...this.file, id: this.$route.params?.id })
         return
       }
@@ -181,12 +195,13 @@ export default {
         },
         () => {
           storage
-            .ref('popularWork')
+            .ref('banner')
             .child(this.video.name)
             .getDownloadURL()
             .then(downloadUrl => {
               this.file.video_url = downloadUrl
-              if (this.$route.params?.id) {
+              if (this.type === 'editPage') {
+                console.log('masuk cuyy')
                 this.$store.dispatch('editHeroSection', { ...this.file, id: this.$route.params?.id })
                 return
               }
@@ -198,7 +213,7 @@ export default {
     detailData () {
       if (this.type === 'editPage') {
         this.file = this.$store.state.detailHeroSection
-        this.video = true
+        // this.video = true
         this.videoUrl = this.$store.state.detailHeroSection.video_url
       } else {
         this.clearData()

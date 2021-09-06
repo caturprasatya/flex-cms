@@ -3,7 +3,8 @@
     <div class="absolute opacity-60 inset-0 z-0"></div>
     <!-- <div v-if="$route.name === 'Edit File' && !$store.isEditPage">
     </div> -->
-    <div class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
+    <PacmanLoader v-if="$store.state.isLoading" />
+    <div v-else class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
       <router-link to="/" class="nav-link" aria-current="page">
         <div class="flex justify-end">
             <button class="absolute top-0 z-12 bg-blue-500 text-white p-2 rounded hover:bg-blue-800">Close</button>
@@ -56,7 +57,7 @@
         </div> -->
         <div
           class="grid grid-cols-1 space-y-2">
-          <label class="text-sm font-bold text-gray-500 tracking-wide">{{ file.type !== 'video' ? 'Attach Files' : 'Select Image For Cover'}}</label>
+          <label class="text-sm font-bold text-gray-500 tracking-wide">Select Image For Cover</label>
           <div class="flex items-center justify-center w-full">
             <label class="flex flex-col rounded-lg border-4 border-dashed w-full h-70 p-10 group text-center">
               <div class="h-full w-full text-center flex flex-col justify-center items-center  ">
@@ -104,7 +105,7 @@
         </div>
         <div
           class="grid grid-cols-1 space-y-2">
-          <label class="text-sm font-bold text-gray-500 tracking-wide">Attach Files </label>
+          <label class="text-sm font-bold text-gray-500 tracking-wide">Attach Files<span class=" text-red-400">* Video Embed from Youtube</span></label>
             <textarea
             v-model="video_url"
             class="text-base p-2 bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
@@ -147,6 +148,7 @@
 <script>
 import { mapState } from 'vuex'
 import ImageUplaoder from 'vue-image-upload-resize'
+import PacmanLoader from 'vue-spinner/src/PacmanLoader.vue'
 
 export default {
   name: 'InputForm',
@@ -271,7 +273,8 @@ export default {
     ...mapState(['categories'])
   },
   components: {
-    ImageUplaoder
+    ImageUplaoder,
+    PacmanLoader
   },
   mounted () {
     this.onEditPage()

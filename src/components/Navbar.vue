@@ -21,10 +21,26 @@
         </div>
       </div>
       <!-- right navbar -->
-      <div class="flex items-center relative">
-        <button class="button button--pandora" @click.prevent="logout"><span>Logout</span></button>
-        <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" class="w-12 h-12 rounded-full shadow-lg" @click="dropDownOpen = !dropDownOpen"> -->
+       <div class="relative">
+          <button @click="isOpen = !isOpen" class="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
+              <img src="../assets/image/Logo.png">
+          </button>
+          <button v-if="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
+          <div v-if="isOpen" class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+            <router-link to="/UserEdit" class="nav-link" aria-current="page">
+            <span class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-blue-500 hover:text-white">
+              Edit Account
+            </span>
+            </router-link>
+            <a href="#" @click.prevent="logout" class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-blue-500 hover:text-white">
+              Sign Out
+            </a>
+          </div>
       </div>
+      <!-- <div class="flex items-center relative">
+        <button class="button button--pandora" @click.prevent="logout"><span>Logout</span></button>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" class="w-12 h-12 rounded-full shadow-lg" @click="isOpen = !isOpen">
+      </div> -->
     </div>
   </div>
 </template>
@@ -40,7 +56,7 @@ export default {
   },
   data () {
     return {
-      dropDownOpen: false
+      isOpen: false
     }
   },
   methods: {
@@ -50,6 +66,9 @@ export default {
     logout () {
       localStorage.removeItem('access_token')
       router.push('/login')
+    },
+    openDropDown () {
+      this.isOpen = !this.isOpen
     }
   }
 }

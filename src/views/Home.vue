@@ -50,6 +50,7 @@ export default {
     this.$store.dispatch('fetchPopularWorks')
     this.$store.dispatch('fetchHeroSections')
     this.$store.dispatch('fetchCategories')
+    this.$store.dispatch('fetchServices')
     this.$store.dispatch('fetchNavbars')
     this.$store.dispatch('fetchFooters')
     this.$store.dispatch('fetchContacts')

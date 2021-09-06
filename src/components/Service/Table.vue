@@ -10,7 +10,7 @@
                       <th class="py-3 px-6 text-center">Action</th>
                     </tr>
                   </thead>
-                  <tbody v-for="(item, index) in stories" :key="index" class="text-gray-100 text-sm font-light">
+                  <tbody v-for="(item, index) in services" :key="index" class="text-gray-100 text-sm font-light">
                       <tr class="border-b border-gray-200 hover:bg-gray-400">
                           <td class="py-3 px-6 justify-self-center max-w-xs h-12">
                               <div class="flex justify-center items-center whitespace-wrap">
@@ -44,7 +44,7 @@ import Swal from 'sweetalert2'
 // import { AtomSpinner } from 'epic-spinners'
 
 import { mapState } from 'vuex'
-// import CardModal from '@/components/Story/ui/CardModalBanner.vue'
+// import CardModal from '@/components/Service/ui/CardModalBanner.vue'
 
 export default {
   name: 'Table',
@@ -54,7 +54,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['stories'])
+    ...mapState(['services'])
   },
   methods: {
     deleteProduct (id) {
@@ -68,12 +68,12 @@ export default {
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
         if (result.isConfirmed) {
-          this.$store.dispatch('deleteStoryById', id)
+          this.$store.dispatch('deleteServiceById', id)
         }
       })
     },
     populateProduct (id) {
-      this.$store.dispatch('getStoryById', { id, isEdit: false })
+      this.$store.dispatch('getServiceById', { id, isEdit: false })
     }
   },
   components: {
