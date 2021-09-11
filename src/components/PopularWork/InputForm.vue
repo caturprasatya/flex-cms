@@ -3,7 +3,8 @@
     <div class="absolute opacity-60 inset-0 z-0"></div>
     <!-- <div v-if="$route.name === 'Edit File' && !$store.isEditPage">
     </div> -->
-    <PacmanLoader v-if="$store.state.isLoading" />
+    <ProgressBar v-if="isUploaded" :progress="progress"></ProgressBar>
+    <PacmanLoader v-else-if="$store.state.isLoading && !isUploaded" />
     <div v-else class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
       <router-link to="/" class="nav-link" aria-current="page">
         <div class="flex justify-end">
@@ -33,6 +34,14 @@
             placeholder="Write Desc..." />
         </div>
         <div class="grid grid-cols-1 space-y-2">
+          <label class="text-sm font-bold text-gray-500 tracking-wide">Sort Custom</label>
+            <input
+            class="text-base p-2 border bg-gray-200 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+            type="number"
+            v-model="file.sortId"
+            placeholder="Input Number">
+        </div>
+        <div class="grid grid-cols-1 space-y-2">
           <label class="text-sm font-bold text-gray-500 tracking-wide">Category</label>
             <svg class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 232">
               <path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero"></path>
@@ -60,12 +69,12 @@
           <label class="text-sm font-bold text-gray-500 tracking-wide">Select Image For Cover</label>
           <div class="flex items-center justify-center w-full">
             <label class="flex flex-col rounded-lg border-4 border-dashed w-full h-70 p-10 group text-center">
-              <div class="h-full w-full text-center flex flex-col justify-center items-center  ">
+              <div class="h-full w-full text-center flex flex-col cursor-pointer justify-center items-center  ">
                 <ImageUplaoder
                   :preview="true"
                   :className="['fileinput', { 'fileinput--loaded': hasImage }]"
                   capture="environment"
-                  :quality="0.7"
+                  :quality="0.2"
                   :debug="1"
                   :maxWidth="1280"
                   :maxHeight="720"
@@ -77,7 +86,7 @@
                 >
                   <label
                   ref="input"
-                  class="flex flex-col justify-center items-center max-h-48 w-full mx-auto mt-10"
+                  class="flex flex-col cursor-pointer justify-center items-center max-h-48 w-full mx-auto mt-10"
                   for="fileInput"
                   slot="upload-label"
                   >
@@ -147,7 +156,9 @@
 
 <script>
 import { mapState } from 'vuex'
+import { storage } from '../../configs/firebase'
 import ImageUplaoder from 'vue-image-upload-resize'
+import ProgressBar from './ui/ProgressBar.vue'
 import PacmanLoader from 'vue-spinner/src/PacmanLoader.vue'
 
 export default {
@@ -158,15 +169,16 @@ export default {
       file: {
         title: '',
         description: '',
-        imagaeData: '',
-        CategoryId: 0
+        imageData: '',
+        CategoryId: 0,
+        sortId: 0,
+        nameImage: ''
       },
-      progressBarImage: 0,
-      progressBarVideo: 0,
+      progress: 0,
+      isUploaded: false,
       hasImage: false,
       image: null,
       video: null,
-      videoUrl: null,
       video_url: '',
       isEditVideo: false
     }
@@ -180,27 +192,58 @@ export default {
       this.file = {
         title: '',
         description: '',
-        imagaeData: '',
-        type: '',
-        CategoryId: 0
+        imagaData: '',
+        CategoryId: 0,
+        sortId: 0,
+        nameImage: ''
       }
       this.hasImage = false
+      this.progress = 0
       this.image = null
       this.video = null
-      this.videoUrl = null
       this.video_url = ''
       this.isEditVideo = false
     },
-    onUploadImage () {
-      if (this.image) {
-        this.file.imageData = this.image.dataUrl
+    async onUploadImage () {
+      if (this.image.info.name.length) {
+        this.file.nameImage = this.image.info.name
+        const uploadTask = storage.ref(`popularWork/${this.file.nameImage}`).putString(this.image.dataUrl.split(',')[1], 'base64')
+        uploadTask.on(
+          'state_changed',
+          snapshot => {
+            this.isUploaded = true
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            )
+            this.$store.commit('setProgressBar', progress)
+            console.log(progress)
+            if (progress >= 99) {
+              this.isUploaded = false
+            }
+          },
+          error => {
+            console.error(error.message)
+          },
+          () => {
+            storage
+              .ref('popularWork')
+              .child(this.file.nameImage)
+              .getDownloadURL()
+              .then(downloadUrl => {
+                this.file.imageData = downloadUrl
+                this.onUploadVideo()
+              })
+          }
+        )
+      } else {
+        this.onUploadVideo()
       }
-      this.onUploadVideo()
     },
     async onUploadVideo () {
       const onChange = this.video_url.search('theme')
       if (this.type === 'editPage' && onChange > 0) {
         this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id, video_url: this.video_url })
+        this.clearFile()
         return
       }
       if (this.type === 'editPage' && onChange < 0) {
@@ -209,53 +252,14 @@ export default {
           id: this.$route.params?.id,
           video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&autoplay=1&loop=1&rel=0'
         })
+        this.clearFile()
         return
       }
       if (this.video_url.length && this.type === 'addPage') {
         this.$store.dispatch('addPopularWork', { ...this.file, video_url: this.video_url + '?theme=black&color=red&showinfo=1&modestbranding=1&autoplay=1&loop=1&rel=0' })
       }
       this.clearFile()
-      // const uploadTask = storage.ref(`popularWork/${this.video.name}`).put(this.video)
-      // uploadTask.on(
-      //   'state_changed',
-      //   snapshot => {
-      //     const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
-      //     this.progressBarVideo = progress
-      //   },
-      //   error => {
-      //     console.error(error)
-      //   },
-      //   () => {
-      //     storage
-      //       .ref('popularWork')
-      //       .child(this.video.name)
-      //       .getDownloadURL()
-      //       .then(downloadUrl => {
-      //         this.video_url = downloadUrl
-      //         this.$store.dispatch('addPopularWork', { ...this.file, video_url: this.video_url })
-      //         if (this.type === 'ediPage') {
-      //           this.$store.dispatch('editPopularWork', { ...this.file, id: this.$route.params?.id })
-      //         }
-      //         this.clearFile()
-      //       })
-      //   }
-      // )
     },
-    // deleteFileUpload () {
-    //   if (this.file_data) {
-    //     // Create a reference to the file to delete
-    //     const desertRef = storage.ref(`media/${this.file_data?.name}`)
-    //     // Delete the file
-    //     desertRef.delete().then(function () {
-    //       // File deleted successfully
-    //     }).catch(function (error) {
-    //       // Uh-oh, an error occurred!
-    //       console.log(error)
-    //     })
-    //   } else {
-    //     console.log('not handle')
-    //   }
-    // },
     async uploadData () {
       this.onUploadImage()
     },
@@ -274,7 +278,8 @@ export default {
   },
   components: {
     ImageUplaoder,
-    PacmanLoader
+    PacmanLoader,
+    ProgressBar
   },
   mounted () {
     this.onEditPage()

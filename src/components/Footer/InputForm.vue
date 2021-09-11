@@ -47,7 +47,7 @@
                   :preview="true"
                   :className="['fileinput', { 'fileinput--loaded': hasImage }]"
                   capture="environment"
-                  :quality="0.7"
+                  :quality="0.5"
                   :debug="1"
                   :maxWidth="30"
                   :maxHeight="30"

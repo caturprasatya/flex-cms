@@ -129,7 +129,7 @@ export default new Vuex.Store({
       try {
         await axios({
           method: 'PUT',
-          url: '/update',
+          url: '/updateUser',
           headers: {
             'X-Access-Token': localStorage.getItem('access_token')
           },
@@ -167,7 +167,7 @@ export default new Vuex.Store({
           },
           data: payload
         })
-        dispatch('fetchPopularWorks')
+        await dispatch('fetchPopularWorks')
         // Swal({
         //   title: 'Product Added',
         //   showClass: {
@@ -195,7 +195,7 @@ export default new Vuex.Store({
           },
           data: payload
         })
-        dispatch('fetchPopularWorks')
+        await dispatch('fetchPopularWorks')
         commit('setLoading', false)
         router.push('/')
       } catch ({ response }) {
@@ -296,7 +296,7 @@ export default new Vuex.Store({
           },
           data: payload
         })
-        dispatch('fetchHeroSections')
+        await dispatch('fetchHeroSections')
         commit('setLoading', false)
         router.push('/banner')
       } catch ({ response }) {
@@ -449,15 +449,16 @@ export default new Vuex.Store({
     },
     async addContact ({ commit, dispatch }, payload) {
       commit('setLoading', true)
+      console.log(payload)
       try {
-        await axios({
-          method: 'POST',
-          url: '/contact',
-          headers: {
-            'X-Access-Token': localStorage.getItem('access_token')
-          },
-          data: payload
-        })
+        // await axios({
+        //   method: 'POST',
+        //   url: '/contact',
+        //   headers: {
+        //     'X-Access-Token': localStorage.getItem('access_token')
+        //   },
+        //   data: payload
+        // })
         dispatch('fetchContacts')
         commit('setLoading', true)
         // Vue.swal({

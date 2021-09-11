@@ -94,6 +94,7 @@ export default {
         this.$store.dispatch('editContact', { ...this.file, id: this.$route.params?.id })
         return
       }
+      console.log(this.file)
       this.$store.dispatch('addContact', this.file)
     },
     detailData () {

@@ -7,8 +7,8 @@
       color="#ff1d5e"
     /> -->
     <div class="absolute opacity-60 inset-0 z-0"></div>
-      <ProgressBar v-if="isUpload" :progress="progress"></ProgressBar>
-      <div v-if="!isUpload" class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
+      <ProgressBar v-if="isUploaded" :progress="progress"></ProgressBar>
+      <div v-if="!isUploaded" class="sm:max-w-lg w-full p-10 bg-gray-300 shadow rounded-xl z-10">
         <router-link to="/banner" class="nav-link" aria-current="page">
           <div class="flex justify-end">
               <button class="absolute top-0 z-12 bg-blue-500 text-white p-2 rounded hover:bg-blue-800">Close</button>
@@ -50,18 +50,18 @@
           </div>
         </div>
           <div class="grid grid-cols-1 space-y-2">
-            <label class="text-sm font-bold text-gray-500 tracking-wide">Select Image</label>
+            <label class="text-sm font-bold text-gray-500 tracking-wide">Select Videos</label>
             <div class="flex items-center justify-center w-full">
               <label class="flex flex-col rounded-lg border-4 border-dashed w-full h-70 p-10 group text-center">
                 <div class="h-full w-full text-center flex flex-col justify-center items-center  ">
                   <div class="flex flex-col w-full max-h-96 items-center justify-evenly bg-grey-lighter">
                     <video v-if="video" ref="video" :src="videoUrl" width="300" height="300" controls class="video"></video>
-                    <label class="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white">
+                    <label class="w-64 flex flex-col items-center px-4 py-6 bg-white text-blu  rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white">
                       <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                           <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z"></path>
                       </svg>
-                      <span class="mt-2 text-base leading-normal">Select a file</span>
-                      <input type='file' @change="previewFilesVideo" class="hidden" accept="video/*" />
+                      <span class="mt-2 text-base leading-normal cursor-pointer">Select a file</span>
+                      <input type='file' @change="previewFilesVideo" class="hidden cursor-pointer" accept="video/*" />
                     </label>
                 </div>
                 </div>
@@ -70,15 +70,15 @@
           </div>
            <div
           class="grid grid-cols-1 space-y-2">
-          <label class="text-sm font-bold text-gray-500 tracking-wide">'Select Video</label>
+          <label class="text-sm font-bold text-gray-500 tracking-wide">Select Image</label>
           <div class="flex items-center justify-center w-full">
             <label class="flex flex-col rounded-lg border-4 border-dashed w-full h-70 p-10 group text-center">
-              <div class="h-full w-full text-center flex flex-col justify-center items-center  ">
+              <div class="h-full w-full text-center flex flex-col justify-center cursor-pointer items-center  ">
                 <ImageUplaoder
                   :preview="true"
                   :className="['fileinput', { 'fileinput--loaded': hasImage }]"
                   capture="environment"
-                  :quality="0.7"
+                  :quality="0.3"
                   :debug="1"
                   :maxWidth="1280"
                   :maxHeight="720"
@@ -90,7 +90,7 @@
                 >
                   <label
                   ref="input"
-                  class="flex flex-col justify-center items-center max-h-48 w-full mx-auto mt-10"
+                  class="flex flex-col cursor-pointer justify-center items-center max-h-48 w-full mx-auto mt-10"
                   for="fileInput"
                   slot="upload-label"
                   >
@@ -154,8 +154,8 @@ export default {
       },
       progress: 0,
       video: '',
-      videoUrl: null,
-      isUpload: false,
+      videoUrl: '',
+      isUploaded: false,
       hasImage: false,
       image: null
     }
@@ -164,6 +164,7 @@ export default {
     previewFilesVideo (event) {
       this.video = event.target.files[0]
       this.videoUrl = URL.createObjectURL(event.target.files[0])
+      console.log(this.videoUrl, '=========================================================')
     },
     setImage: function (output) {
       this.hasImage = true
@@ -173,7 +174,7 @@ export default {
       if (this.image) {
         this.file.imageData = this.image.dataUrl
       }
-      if (this.type === 'editPage' && !this.video.length) {
+      if (this.type === 'editPage' && !this.video.name?.length) {
         this.$store.dispatch('editHeroSection', { ...this.file, id: this.$route.params?.id })
         return
       }
@@ -181,13 +182,13 @@ export default {
       uploadTask.on(
         'state_changed',
         snapshot => {
-          this.isUpload = true
+          this.isUploaded = true
           const progress = Math.round(
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           )
           this.$store.commit('setProgressBar', progress)
           if (this.progress === 100) {
-            this.isUpload = false
+            this.isUploaded = false
           }
         },
         error => {
@@ -201,7 +202,6 @@ export default {
             .then(downloadUrl => {
               this.file.video_url = downloadUrl
               if (this.type === 'editPage') {
-                console.log('masuk cuyy')
                 this.$store.dispatch('editHeroSection', { ...this.file, id: this.$route.params?.id })
                 return
               }
@@ -213,7 +213,7 @@ export default {
     detailData () {
       if (this.type === 'editPage') {
         this.file = this.$store.state.detailHeroSection
-        // this.video = true
+        this.video = true
         this.videoUrl = this.$store.state.detailHeroSection.video_url
       } else {
         this.clearData()
